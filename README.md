@@ -124,9 +124,9 @@ Catalog: [examples/README.md](./examples/README.md)
 
 ## Contributing to docs
 
-- User docs → `docs/language/`, `docs/stdlib/`, `docs/libraries/`
-- Implementation docs → `docs/implementation/`
-- Diagrams → `docs/diagrams/dryad-language/parts/`
+- User docs → `language/`, `stdlib/`, `libraries/`
+- Implementation docs → `implementation/`
+- Diagrams → `diagrams/dryad-language/parts/`
 - Update [SITEMAP.md](SITEMAP.md) when adding new files
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for the development workflow.

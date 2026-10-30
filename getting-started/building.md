@@ -42,8 +42,8 @@ dryad check <file>                            Validate syntax only
 ```bash
 cd src/build
 ctest --output-on-failure
-./unit_tests          # 408 unit tests (+1 JIT slow test)
-./integration_tests   # end-to-end workflows
+./unit_tests          # 435 unit tests (lexer, parser, interpreter, intrinsics, ...)
+./integration_tests   # 19 end-to-end workflows
 ```
 
 ## Examples & benchmark
