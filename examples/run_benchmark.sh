@@ -207,7 +207,10 @@ run_example() {
     local path="$2"
     local flags="${3:-}"
     local optional="${4:-false}"
+    local env_json="${5:-}"
     local full="$SCRIPT_DIR/$path"
+
+    apply_example_env "$env_json"
 
     if [[ ! -f "$full" ]]; then
         echo "MISSING  $id ($path)"
@@ -309,7 +312,7 @@ while IFS='|' read -r id path flags optional env_json; do
     if [[ $TRIPLE -eq 1 ]]; then
         run_example_triple "$id" "$path" "$flags" "$optional" "$env_json"
     else
-        run_example "$id" "$path" "$flags" "$optional"
+        run_example "$id" "$path" "$flags" "$optional" "$env_json"
     fi
 done < <(python3 - "$MANIFEST" <<'PY'
 import json, sys

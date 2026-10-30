@@ -1,8 +1,8 @@
 // DryadSquare pipeline: source → AST → bytecode → VM.
 
-import { Sq_parse } from "examples/dryadsquare/square/parse";
-import { Sq_compile } from "examples/dryadsquare/square/compiler";
-import { Sq_vmRun, Sq_vmGetVar } from "examples/dryadsquare/square/vm";
+import { Sq_parse } from "./parse";
+import { Sq_compile } from "./compiler";
+import { Sq_vmRun, Sq_vmGetVar } from "./vm";
 
 function Sq_compileSource(source) {
     let ast = Sq_parse(source);

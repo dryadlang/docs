@@ -1,7 +1,7 @@
 // DryadSquare — Turing-completeness benchmark (100% Dryad).
 // Run from src/: ./build/bin/dryad ../docs/examples/dryadsquare/dryadsquare.dryad
 
-import { Sq_runAndGet } from "examples/dryadsquare/square/runtime";
+import { Sq_runAndGet } from "./square/runtime";
 
 print("DryadSquare Turing benchmark");
 print("==========================");

@@ -11,7 +11,7 @@ import {
     Sq_isIdentStartByte,
     Sq_isIdentPartByte,
     Sq_parseInt
-} from "examples/dryadsquare/square/string";
+} from "./string";
 
 function Sq_makeToken(type, value, pos) {
     let token = __runtime_create_object();

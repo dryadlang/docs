@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # DryadSquare Turing-completeness benchmark gate.
-# Usage: ./examples/dryadsquare/run_turing_benchmark.sh [--verbose]
+# Usage: ./docs/examples/dryadsquare/run_turing_benchmark.sh [--verbose]
 
 set -euo pipefail
 

@@ -1,7 +1,7 @@
 // Recursive-descent parser for Square.
 
 import { List } from "@std/collections/list";
-import { Sq_lex } from "examples/dryadsquare/square/token";
+import { Sq_lex } from "./token";
 
 function Sq_node(kind) {
     let node = __runtime_create_object();
