@@ -1,0 +1,1276 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+\documentclass[
+  english,
+  11pt,
+  a4paper,
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[]{Liberation Serif}
+  \setmonofont[Scale=0.82]{DejaVu Sans Mono}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\ifLuaTeX
+\usepackage[bidi=basic,shorthands=off,]{babel}
+\else
+\usepackage[bidi=default,shorthands=off,]{babel}
+\fi
+\ifPDFTeX
+\else
+\babelfont{rm}[]{Liberation Serif}
+\fi
+\ifLuaTeX
+  \usepackage{selnolig} % disable illegal ligatures
+\fi
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% Dryad Language Specification — LaTeX preamble
+% Loaded with --include-in-header. Compatible with XeLaTeX/Tectonic.
+
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{needspace}
+
+% ---------------------------------------------------------------- colours
+\definecolor{dryadgreen}{RGB}{47,93,58}
+\definecolor{dryadlight}{RGB}{110,140,115}
+\definecolor{rulegray}{RGB}{213,219,212}
+
+% ---------------------------------------------------------------- headings
+\titleformat{\section}
+  {\Large\bfseries\color{dryadgreen}}{}{0pt}{}
+  [\vspace{-6pt}{\color{dryadgreen}\rule{\linewidth}{0.9pt}}]
+\titleformat{\subsection}
+  {\large\bfseries\color{dryadgreen!85!black}}{}{0pt}{}
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{black}}{}{0pt}{}
+\titleformat{\paragraph}[runin]
+  {\normalsize\bfseries}{}{0pt}{}[.]
+\titlespacing*{\section}{0pt}{20pt plus 4pt minus 2pt}{9pt}
+\titlespacing*{\subsection}{0pt}{15pt plus 3pt minus 2pt}{6pt}
+\titlespacing*{\subsubsection}{0pt}{12pt plus 2pt minus 2pt}{4pt}
+
+% ---------------------------------------------------------------- layout
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\renewcommand{\arraystretch}{1.18}
+\setlist{itemsep=0.15em, topsep=0.35em, parsep=0.2em}
+
+% ---------------------------------------------------------------- headers
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{dryadgreen}\textsc{Dryad Language Specification}}
+\fancyhead[R]{\small\color{dryadgreen}\textsc{Edition 1.0 --- Draft}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\small\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+}
+
+% ---------------------------------------------------------------- title page
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{titlepage}
+    \thispagestyle{empty}
+    \centering
+    \vspace*{1.6cm}
+    \includegraphics[width=5.6cm]{assets/dryad-logo.png}\par
+    \vspace{1.3cm}
+    {\color{dryadgreen}\rule{\linewidth}{1.1pt}}\par
+    \vspace{0.7cm}
+    {\fontsize{30}{36}\selectfont\bfseries\color{dryadgreen}\@title\par}
+    \vspace{0.7cm}
+    {\Large\color{dryadlight}\@author\par}
+    \vspace{1.1cm}
+    {\color{dryadgreen}\rule{\linewidth}{1.1pt}}\par
+    \vfill
+    {\large\bfseries Edition 1.0 --- Draft}\par
+    \vspace{0.25cm}
+    {\large \@date}\par
+    \vspace{0.25cm}
+    {\normalsize Dryad Language Project}\par
+    \vspace{1.2cm}
+    \begin{minipage}{0.86\linewidth}
+      \small\itshape
+      This document specifies the Dryad programming language. It is the
+      normative reference for language implementors. Clauses are normative
+      unless explicitly marked informative; proposals and implementation
+      guidance are confined to the annexes.\par
+      \vspace{0.5em}
+      \upshape\small Licensed under the MIT License.
+    \end{minipage}
+  \end{titlepage}
+  \setcounter{page}{2}%
+}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Dryad Language Specification},
+  pdfauthor={Pedro Kaleb},
+  pdflang={en},
+  colorlinks=true,
+  linkcolor={dryadgreen},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={dryadgreen},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Dryad Language Specification}
+\author{Pedro Kaleb}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+This document specifies the Dryad programming language: its lexical
+grammar, type system, expressions, statements, declarations, module
+system, execution model, error model, concurrency primitives, foreign
+function interface, runtime architecture, standard library, bytecode
+instruction set, and ahead-of-time compilation pipeline. It is the
+normative reference for implementors of Dryad and supersedes the Dryad
+Conventions 1.0 draft as the authoritative specification.
+\end{abstract}
+
+{
+\hypersetup{linkcolor=black}
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+\section{Status of This Document}\label{status-of-this-document}
+
+\textbf{Document identifier.} DRYAD-SPEC-1.0-DRAFT.
+
+\textbf{Status.} Draft Standard. This edition is complete for review but
+is not yet a ratified standard. Implementations claiming conformance to
+this edition MUST identify the edition and the conformance class they
+implement (Clause 2).
+
+\textbf{Normative content.} Clauses 1 through 20 and Annexes A through D
+are normative. The Introduction, Clause 21, Clause 24, and Annexes E
+through G are informative. A clause or annex is normative unless it is
+explicitly marked \emph{informative}. Within normative clauses, text
+marked \textbf{NOTE} is informative.
+
+\textbf{Relationship to prior documents.} This document consolidates and
+replaces the content of \emph{Dryad Conventions 1.0} (the
+\texttt{conventions} publication). It also supersedes \emph{Dryad
+Theoretical Foundation v2.0} as the authoritative language
+specification; the v2 document is retained as an informative
+architecture paper. Where this document and any prior document disagree,
+this document prevails.
+
+\textbf{Editorial decisions.} The conventions draft contains internal
+inconsistencies. Every deliberate resolution is recorded in Annex E. An
+implementation that follows Annex E is following this specification, not
+deviating from it.
+
+\textbf{Change control.} Changes to normative content require a new
+edition or a published erratum. Editorial changes that do not alter
+normative behaviour may be published as a revision of the same edition.
+
+\textbf{Licence.} This specification is published under the MIT Licence.
+
+\section{Introduction}\label{introduction}
+
+\emph{This Introduction is informative.}
+
+Dryad is a multi-paradigm programming language designed for clarity,
+portability, and deterministic execution. Its syntax is deliberately
+close to JavaScript and TypeScript, while its runtime architecture
+borrows the micro-kernel discipline of systems languages: a small native
+core exposes a fixed set of intrinsics, and the entire standard library
+is written in Dryad itself.
+
+The language is defined by the interaction of four layers:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Source language.} A statically scoped, dynamically typed
+  language with optional strict typing.
+\item
+  \textbf{Execution tiers.} A tree-walking interpreter, a stack-based
+  bytecode virtual machine, and an ahead-of-time compiler. The tiers are
+  required to be observationally equivalent.
+\item
+  \textbf{Native boundary.} A minimal, explicitly specified intrinsic
+  interface through which all operating-system interaction occurs.
+\item
+  \textbf{Standard library.} Pure Dryad modules that define the
+  user-visible platform, including I/O, networking, collections,
+  concurrency, and diagnostics.
+\end{enumerate}
+
+This specification is written for implementors. It does not teach the
+language, and it does not describe the current implementation. It
+defines what a conforming implementation MUST do. Where the current
+implementation differs, the implementation is non-conforming; Clause 24
+and Annex E identify known gaps for planning purposes.
+
+\subsection{Design goals}\label{design-goals}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2143}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.7857}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Goal
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Normative consequence
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Syntactic familiarity & The surface grammar follows
+JavaScript/TypeScript conventions unless this document states
+otherwise. \\
+Paradigm flexibility & Procedural, object-oriented, and functional
+constructs are first-class and freely composable. \\
+Optional typing & Dynamic typing is the default; strict typing is opt-in
+per module, function, or declaration. \\
+Triple execution & The interpreter, bytecode VM, and AOT compiler MUST
+preserve the same observable semantics. \\
+Native concurrency & Threads, mutexes, and asynchronous functions are
+language primitives, not library add-ons. \\
+Self-hosting & The standard library MUST be written in pure Dryad and
+MUST use only the specified intrinsics. \\
+Zero surprises & Every construct in this document has exactly one
+defined behaviour; undefined behaviour is not permitted. \\
+\end{longtable}
+
+\subsection{Reading guide}\label{reading-guide}
+
+A reader implementing an interpreter SHOULD read Clauses 1--15 in order.
+A reader implementing the bytecode VM SHOULD additionally read Clause
+19. A reader implementing the AOT compiler SHOULD read Clauses 19 and
+20. A reader implementing the standard library SHOULD read Clauses 8,
+14, 17, and 18.
+
+\section{1 Scope}\label{scope}
+
+\textbf{1.1} This document specifies the syntax, static semantics, and
+runtime semantics of the Dryad programming language, together with the
+normative requirements for its execution engines, native runtime
+interface, standard library, bytecode format, and ahead-of-time
+compilation pipeline.
+
+\textbf{1.2} This document specifies the observable behaviour of a
+conforming implementation. Observable behaviour comprises:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  the result of evaluating every well-formed program;
+\item
+  the sequence of side effects produced during evaluation;
+\item
+  the errors and diagnostics reported for ill-formed programs;
+\item
+  the values returned by standard-library functions; and
+\item
+  the concurrency guarantees defined in Clause 15.
+\end{enumerate}
+
+\textbf{1.3} This document does not specify:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  the hardware, operating system, or host environment on which an
+  implementation runs, except where a boundary is explicitly defined;
+\item
+  the internal data structures, algorithms, or source-code organisation
+  of an implementation;
+\item
+  user interfaces, editors, debuggers, package registries, or build
+  tools, except where their behaviour is observable through a normative
+  interface;
+\item
+  the contents of third-party libraries; or
+\item
+  performance, except where a normative requirement is explicitly
+  stated.
+\end{enumerate}
+
+\textbf{1.4} A program is \emph{well-formed} if it satisfies every early
+error rule in this document. A well-formed program has exactly one
+specified behaviour. This document does not define undefined behaviour;
+where a program violates a precondition, the implementation MUST report
+a runtime error as specified in Clause 14.
+
+\textbf{1.5} The unit of conformance is a \emph{conforming
+implementation}, as defined in Clause 2. Conformance is claimed per
+conformance class, not per feature.
+
+\textbf{1.6} This document is organised as follows:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Clauses
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Subject
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1--6 & Scope, conformance, references, terminology, notation,
+overview \\
+7 & Lexical grammar \\
+8 & Types and values \\
+9 & Expressions \\
+10 & Statements \\
+11 & Functions and classes \\
+12 & Modules \\
+13 & Execution model \\
+14 & Error system \\
+15 & Concurrency model \\
+16 & Foreign function interface \\
+17 & Runtime architecture and intrinsics \\
+18 & Standard library \\
+19 & Bytecode and intermediate representation \\
+20 & Ahead-of-time compilation \\
+21--24 & Paradigms, formal grammar, conformance testing, limitations \\
+Annexes A--G & Registries, editorial decisions, proposals,
+bibliography \\
+\end{longtable}
+
+\section{2 Conformance}\label{conformance}
+
+\textbf{2.1} A \emph{conforming implementation} is a program that
+implements every normative requirement of this document for at least one
+conformance class, and that does not contradict any other normative
+requirement.
+
+\textbf{2.2} This document defines four conformance classes.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2245}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3673}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2653}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Class
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Identifier
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Required clauses
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Core & \texttt{core-1.0} & 7--18 & Lexical analysis, parsing, static
+semantics, interpretation, modules, errors, concurrency, FFI, runtime
+interface, standard library. \\
+Virtual Machine & \texttt{vm-1.0} & 7--19 & Core, plus the bytecode
+compiler, bytecode verifier, and bytecode VM. \\
+Ahead-of-Time & \texttt{aot-1.0} & 7--20 & Core, plus the bytecode
+pipeline and the AOT compiler. \\
+Full & \texttt{full-1.0} & 7--20 & Core, VM, and AOT in a single
+implementation. \\
+\end{longtable}
+
+\textbf{2.3} An implementation that claims a conformance class MUST:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  accept every program that this document classifies as well-formed;
+\item
+  reject every program that this document classifies as ill-formed, with
+  a diagnostic as specified in Clause 14;
+\item
+  produce the specified result for every well-formed program;
+\item
+  preserve the concurrency guarantees of Clause 15; and
+\item
+  satisfy every MUST or MUST NOT requirement in the clauses required by
+  its class.
+\end{enumerate}
+
+\textbf{2.4} An implementation MAY provide extensions provided that all
+of the following hold:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  the extension is not observable in a program that uses only the
+  constructs specified in this document;
+\item
+  the extension does not alter the meaning of any specified construct;
+\item
+  the implementation documents the extension and the conditions under
+  which it is active; and
+\item
+  disabling the extension restores a conforming implementation.
+\end{enumerate}
+
+An implementation MUST NOT use the availability of an extension to
+justify a deviation from a normative requirement.
+
+\textbf{2.5} Certain behaviours are designated
+\emph{implementation-defined} or \emph{implementation-dependent}. For
+implementation-defined behaviour, a conforming implementation MUST
+document the chosen behaviour. For implementation-dependent behaviour,
+the implementation may choose freely and is not required to document the
+choice. This document identifies such behaviours explicitly; no other
+behaviour is implementation-defined or implementation-dependent.
+
+\textbf{2.6} A conforming implementation SHOULD pass the conformance
+test suite maintained by the Dryad Language Project for its claimed
+class. Passing the test suite is evidence of conformance but is not a
+substitute for the normative requirements of this document.
+
+\textbf{2.7} An implementation MUST report its edition and conformance
+class when invoked with \texttt{-\/-version} or an equivalent mechanism.
+The report MUST identify this document as \texttt{DRYAD-SPEC-1.0-DRAFT}.
+
+\textbf{2.8} Conformance is not affected by:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  the execution tier used to evaluate a program, provided the observable
+  behaviour is preserved;
+\item
+  the host operating system, provided the specified platform
+  abstractions are implemented;
+\item
+  the presence or absence of optional optimisations; or
+\item
+  the textual form of a diagnostic, provided it contains the information
+  required by Clause 14.
+\end{enumerate}
+
+\textbf{2.9} An implementation that cannot support a required facility
+on a given host MUST reject programs that require that facility at the
+earliest specified point, with an error of category \emph{unsupported}
+(Clause 14). Silent degradation is not conforming.
+
+\section{3 Normative References}\label{normative-references}
+
+\textbf{3.1} The following documents are indispensable for the
+application of this specification. For dated references, only the cited
+edition applies. For undated references, the latest edition applies.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2750}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1750}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Reference
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Title
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Use in this document
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+RFC 2119 & Key words for use in RFCs to Indicate Requirement Levels &
+Normative keywords (Clause 5.1) \\
+RFC 8174 & Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words &
+Normative keyword interpretation \\
+RFC 3629 & UTF-8, a transformation format of ISO 10646 & Source-text
+encoding (Clause 7.1) \\
+ISO/IEC 10646 & Information technology --- Universal Coded Character Set
+(UCS) & Character repertoire \\
+The Unicode Standard & Version 15.1 or later & Character properties,
+identifier classes \\
+IEEE 754-2019 & IEEE Standard for Floating-Point Arithmetic & Number
+semantics (Clause 8.2.3) \\
+ISO/IEC 9899:2018 & Programming languages --- C & Foreign function
+interface ABI (Clause 16) \\
+System V ABI & System V Application Binary Interface, x86-64 and ARM64
+editions & Calling conventions (Clauses 16, 20) \\
+ELF gABI & System V gABI, Object File Format & AOT object output (Clause
+20) \\
+PE/COFF & Microsoft Portable Executable and Common Object File Format &
+AOT object output (Clause 20) \\
+ECMA-262 & ECMAScript Language Specification & Informative reference for
+algorithm style and grammar notation \\
+\end{longtable}
+
+\textbf{3.2} The following documents are informative references. They
+describe the design context of this specification but do not create
+conformance requirements.
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Reference & Title \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+DRYAD-TF-2.0 & Dryad Theoretical Foundation, version 2.0 \\
+DRYAD-CONV-1.0 & Dryad Conventions, version 1.0 (superseded) \\
+LLVM Language Reference Manual & LLVM IR used by the AOT pipeline \\
+OpenSSL documentation & TLS backend named by the standard library \\
+POSIX.1-2017 & Portable Operating System Interface \\
+\end{longtable}
+
+\textbf{3.3} Where a normative reference is updated, the Dryad Language
+Project MAY publish an erratum adopting the update. Until such an
+erratum is published, the dated edition cited in Clause 3.1 applies.
+
+\section{4 Terms and Definitions}\label{terms-and-definitions}
+
+For the purposes of this document, the following terms and definitions
+apply. Terms are listed alphabetically. Cross-references use clause
+numbers.
+
+\textbf{Abstract operation.} A named algorithm defined by this document.
+Abstract operations are not callable from Dryad source text; they define
+semantics.
+
+\textbf{Agent.} An independent unit of execution with its own execution
+context and job queue. A Dryad program executes in at least one agent.
+Threads created by \texttt{thread\ function} execute in separate agents
+(Clause 15).
+
+\textbf{AOT compilation.} Ahead-of-time compilation: translation of a
+Dryad program to native code before execution, as specified in Clause
+20.
+
+\textbf{Binding.} The association between an identifier and a value
+within an environment record.
+
+\textbf{Buffer.} A contiguous, bounds-checked byte region with an
+explicit length and capacity (Clause 17.5).
+
+\textbf{Bytecode.} The stack-based instruction format defined in Clause
+19.
+
+\textbf{Call frame.} The runtime record that stores the state of an
+active function invocation.
+
+\textbf{Class.} A value that defines a nominal object type, its
+constructor, its instance members, and its static members (Clause 11).
+
+\textbf{Completion record.} A specification value that records how
+evaluation of a statement or expression terminated. A completion record
+is one of \emph{normal}, \emph{break}, \emph{continue}, \emph{return},
+or \emph{throw} (Clause 10.2).
+
+\textbf{Conforming implementation.} An implementation that satisfies
+Clause 2.
+
+\textbf{Directive.} A syntactic construct beginning with \texttt{\#}
+that instructs the implementation, such as a native-module directive
+\texttt{\#\textless{}io\textgreater{}} (Clause 7.10), or a
+string-literal directive such as \texttt{"use\ strict\ types"} (Clause
+8.6).
+
+\textbf{Dynamic type.} The type of a value at runtime. Every value has
+exactly one dynamic type (Clause 8).
+
+\textbf{Early error.} A condition that makes a program ill-formed and
+that MUST be detected before execution, during parsing or static
+analysis (Clause 14.8).
+
+\textbf{Environment record.} A specification data structure that maps
+identifiers to bindings and that may have an outer environment reference
+(Clause 13.2).
+
+\textbf{Execution context.} The specification state associated with the
+evaluation of a program, module, function, or block. An execution
+context includes a lexical environment, a variable environment, and a
+\texttt{this} binding (Clause 13.2).
+
+\textbf{Export.} A binding made available by a module to importing
+modules (Clause 12.3).
+
+\textbf{Expression.} A syntactic construct that evaluates to a value
+(Clause 9).
+
+\textbf{FFI.} Foreign function interface: the boundary between Dryad and
+code implemented in another language (Clause 16).
+
+\textbf{Function.} A callable value with a parameter list, a body, and a
+captured lexical environment (Clause 11).
+
+\textbf{HAL.} Hardware abstraction layer: the small set of
+platform-specific operations beneath the intrinsic layer (Clause 17.4).
+
+\textbf{Host.} The environment in which a conforming implementation
+executes, including its operating system, filesystem, network stack, and
+clock.
+
+\textbf{Identifier.} A lexical token that names a binding, property,
+label, or module (Clause 7.5).
+
+\textbf{Implementation-defined.} A behaviour for which a conforming
+implementation MUST document its choice (Clause 2.5).
+
+\textbf{Implementation-dependent.} A behaviour for which a conforming
+implementation may choose freely without documentation (Clause 2.5).
+
+\textbf{Intrinsic.} A primitive operation exposed by the runtime and
+declared in Dryad with \texttt{@intrinsic} (Clause 17.2).
+
+\textbf{Job.} A unit of work scheduled on an agent's job queue, used to
+implement promises and asynchronous functions (Clause 15.4).
+
+\textbf{Lexical grammar.} The grammar that defines how source text is
+divided into tokens (Clause 7).
+
+\textbf{Lexical token.} An indivisible lexical unit produced by the
+lexer (Clause 7.4).
+
+\textbf{Module.} A source-text unit with its own scope, exports, and
+module record (Clause 12).
+
+\textbf{Module record.} The specification data structure that records a
+module's exports, imports, and evaluation state (Clause 12.1).
+
+\textbf{Module specifier.} The string or identifier that names a module
+in an import declaration (Clause 12.4).
+
+\textbf{Native directive.} The token
+\texttt{\#\textless{}identifier\textgreater{}} that loads a native
+module (Clause 7.10).
+
+\textbf{Native module.} A host-implemented module exposed through the
+FFI or the intrinsic layer (Clauses 16, 17).
+
+\textbf{Native type.} A machine-level type used by the runtime, AOT
+compiler, and FFI, such as \texttt{f64}, \texttt{i32}, or \texttt{usize}
+(Clause 8.3).
+
+\textbf{Normal completion.} A completion record indicating that
+evaluation continued to the next construct without an abrupt transfer of
+control (Clause 10.2).
+
+\textbf{Object.} A value that groups properties and has an identity
+independent of its contents (Clause 8.3).
+
+\textbf{Observable behaviour.} The behaviour listed in Clause 1.2.
+
+\textbf{Program.} A collection of one or more modules, one of which is
+the entry module. Execution begins at the entry module (Clause 13.7).
+
+\textbf{Promise.} A value representing the eventual result of an
+asynchronous operation (Clause 15.3).
+
+\textbf{Property.} A named or indexed member of an object.
+
+\textbf{Realm.} The set of intrinsic objects and global bindings
+associated with an agent. A realm is created when an agent is created
+(Clause 13.1).
+
+\textbf{Scope.} The region of source text in which a binding is visible,
+together with the rules that determine visibility (Clause 13.3).
+
+\textbf{Shape.} A compiler-internal description of an object's property
+layout, used by the AOT compiler (Clause 20.4).
+
+\textbf{Source text.} A sequence of Unicode code points encoded in UTF-8
+(Clause 7.1).
+
+\textbf{Standard library (STDLIB).} The collection of modules specified
+in Clause 18 and implemented in pure Dryad.
+
+\textbf{Statement.} A syntactic construct that performs an action and
+produces a completion record rather than a value (Clause 10).
+
+\textbf{Static semantics.} Rules that constrain well-formed programs and
+that are enforced before execution, including early errors and type
+checking (Clauses 8, 22).
+
+\textbf{Strict mode.} The optional static typing mode enabled by
+\texttt{"use\ strict\ types"} (Clause 8.6).
+
+\textbf{Syscall.} A primitive operation in the intrinsic set that
+corresponds to an operating-system service (Clause 17.3).
+
+\textbf{Thread.} An independent agent created by a
+\texttt{thread\ function} declaration or a thread-creation operation
+(Clause 15.1).
+
+\textbf{Type.} A set of values. The dynamic type of a value determines
+the operations that are defined on it (Clause 8).
+
+\textbf{Type annotation.} A syntactic type expression attached to a
+declaration, parameter, return position, or expression (Clause 8.4).
+
+\textbf{Value.} A member of a Dryad type. Values are the results of
+expressions and the contents of bindings (Clause 8).
+
+\textbf{Variable.} A binding whose value may be changed after
+declaration.
+
+\textbf{Well-formed program.} A program that satisfies every early error
+rule of this document (Clause 1.4).
+
+\section{5 Notational Conventions}\label{notational-conventions}
+
+\subsection{5.1 Normative keywords}\label{normative-keywords}
+
+\textbf{5.1.1} The key words MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT,
+SHOULD, SHOULD NOT, RECOMMENDED, NOT RECOMMENDED, MAY, and OPTIONAL in
+this document are to be interpreted as described in RFC 2119 and RFC
+8174.
+
+\textbf{5.1.2} These keywords are normative only when they appear in
+uppercase. Lowercase uses of the same words are descriptive.
+
+\textbf{5.1.3} A requirement stated without a keyword is normative if it
+appears in a normative clause and describes observable behaviour, a
+well-formedness condition, or a conformance requirement.
+
+\textbf{5.1.4} The word \emph{can} describes possibility; the word
+\emph{cannot} describes impossibility under this specification. Neither
+word creates an optional implementation choice.
+
+\subsection{5.2 Grammar notation}\label{grammar-notation}
+
+\textbf{5.2.1} Grammars in this document use an extended Backus--Naur
+form (EBNF) with the following metacharacters.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5263}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4737}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Notation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Meaning
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{::=} & Production definition. \\
+\texttt{\textless{}name\textgreater{}} & Nonterminal symbol
+\texttt{name}. \\
+\texttt{"text"} & Terminal symbol consisting of the exact characters
+\texttt{text}. \\
+\texttt{A\ \textbackslash{}\textbar{}\ B} & Alternative: either
+\texttt{A} or \texttt{B}. \\
+\texttt{{[}\ A\ {]}} & Optional occurrence of \texttt{A} (zero or
+one). \\
+\texttt{\{\ A\ \}} & Repetition of \texttt{A} (zero or more). \\
+\texttt{(\ A\ )} & Grouping. \\
+\texttt{ε} & The empty production. \\
+\texttt{(*\ text\ *)} & Informative comment inside a grammar. \\
+\end{longtable}
+
+\textbf{5.2.2} A production of the form
+\texttt{\textless{}A\textgreater{}\ ::=\ \textless{}B\textgreater{}\ \{\ ","\ \textless{}B\textgreater{}\ \}}
+denotes a possibly empty comma-separated sequence of
+\texttt{\textless{}B\textgreater{}}. A trailing comma is permitted only
+where a production says so explicitly.
+
+\textbf{5.2.3} Lexical grammar productions are identified by the prefix
+\texttt{Lexical} and are defined in Clause 7. Syntactic grammar
+productions are defined in Clause 22 and referenced throughout this
+document. When a syntactic production references a token, the token name
+is written in angle brackets, for example
+\texttt{\textless{}Identifier\textgreater{}}.
+
+\textbf{5.2.4} The lexical grammar is applied before the syntactic
+grammar. The lexer consumes the longest sequence of input characters
+that forms a valid token, subject to the rules of Clause 7.11.
+Whitespace and comments separate tokens but are not tokens themselves.
+
+\textbf{5.2.5} A syntactic grammar is unambiguous if every well-formed
+token sequence has exactly one parse tree. This document defines an
+unambiguous grammar. An implementation MUST reject a token sequence for
+which no parse tree exists and MUST report an early error if more than
+one parse tree exists.
+
+\textbf{5.2.6} Grammar productions do not by themselves impose
+evaluation order. Evaluation order is defined by the algorithms in
+Clauses 9 through 13.
+
+\subsection{5.3 Algorithm conventions}\label{algorithm-conventions}
+
+\textbf{5.3.1} Semantic algorithms are written as numbered steps. Steps
+are performed in order unless a step transfers control.
+
+\textbf{5.3.2} The phrase \emph{Let x be \ldots{}} introduces a local
+specification variable \texttt{x}. Specification variables are distinct
+from Dryad variables and are not observable by a program.
+
+\textbf{5.3.3} The phrase \emph{If condition, then \ldots{}} executes
+the indented steps when \texttt{condition} is true. \emph{Otherwise}
+executes them when \texttt{condition} is false. \emph{If condition, then
+\ldots; otherwise \ldots{}} is equivalent.
+
+\textbf{5.3.4} The phrase \emph{Return value} terminates the abstract
+operation and yields \texttt{value}. The phrase \emph{Return} without a
+value yields the normal completion \texttt{Normal(empty)}.
+
+\textbf{5.3.5} The phrase \emph{Assert: condition} states an invariant
+that MUST hold whenever the algorithm reaches that step. A violation
+indicates an error in this specification or in a conforming
+implementation, not in the source program.
+
+\textbf{5.3.6} An abstract operation whose name ends in \texttt{?} MAY
+return an abrupt completion. In an algorithm, the notation
+\texttt{result\ =\ Operation?} means: perform \texttt{Operation}; if it
+returns an abrupt completion, return that completion immediately;
+otherwise, assign its value to \texttt{result}.
+
+\textbf{5.3.7} Abstract operations named in CamelCase, such as
+\texttt{GetValue} or \texttt{ResolveBinding}, are specification
+operations. They are not callable from Dryad source text.
+
+\textbf{5.3.8} An algorithm MAY state that behaviour is
+\emph{implementation-defined} or \emph{implementation-dependent}. Those
+terms have the meanings given in Clause 2.5.
+
+\subsection{5.4 Completion records}\label{completion-records}
+
+\textbf{5.4.1} A completion record is a specification value of one of
+the following forms.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3750}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3750}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Form
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Payload
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Meaning
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{Normal(value)} & A value or \texttt{empty} & Evaluation
+continued normally. \\
+\texttt{Break(label)} & A label or \texttt{empty} & Control transfers to
+the matching labelled statement. \\
+\texttt{Continue(label)} & A label or \texttt{empty} & Control transfers
+to the next iteration of the matching loop. \\
+\texttt{Return(value)} & A value & Control returns from the current
+function. \\
+\texttt{Throw(value)} & A value & An exception is propagating. \\
+\end{longtable}
+
+\textbf{5.4.2} A completion record is \emph{abrupt} if it is not
+\texttt{Normal}. A completion record is \emph{empty} if it carries no
+value.
+
+\textbf{5.4.3} Statement evaluation in Clause 10 yields completion
+records. Expression evaluation in Clause 9 yields values or throws; an
+expression never yields \texttt{Break}, \texttt{Continue}, or
+\texttt{Return}.
+
+\subsection{5.5 Type notation}\label{type-notation}
+
+\textbf{5.5.1} This document uses the following notation for value
+types.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5263}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4737}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Notation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Meaning
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{Null} & The type whose only value is \texttt{null}. \\
+\texttt{Boolean} & \texttt{true} and \texttt{false}. \\
+\texttt{Number} & IEEE 754 binary64 values, including \texttt{NaN} and
+infinities. \\
+\texttt{String} & Finite sequences of Unicode scalar values. \\
+\texttt{Object} & Objects with identity, including arrays, tuples,
+functions, and class instances. \\
+\texttt{Array\textless{}T\textgreater{}} & An ordered, dynamically sized
+sequence of \texttt{T}. \\
+\texttt{Tuple\textless{}T1,\ ...,\ Tn\textgreater{}} & A fixed-length
+sequence with element types \texttt{T1} through \texttt{Tn}. \\
+\texttt{Function\textless{}P...,\ R\textgreater{}} & A callable value
+with parameters \texttt{P...} and result \texttt{R}. \\
+\texttt{Class\textless{}C\textgreater{}} & The type of instances of
+class \texttt{C}. \\
+\texttt{Buffer} & The byte-buffer type of Clause 17.5. \\
+\texttt{Promise\textless{}T\textgreater{}} & The asynchronous-result
+type of Clause 15.3. \\
+\texttt{Result\textless{}T,\ E\textgreater{}} & A value that is either
+\texttt{Ok(T)} or \texttt{Err(E)} (Clause 8.3.7). \\
+\texttt{Thread\textless{}T\textgreater{}} & A handle to a thread
+producing \texttt{T} (Clause 15.1). \\
+\texttt{Mutex} & A mutual-exclusion primitive (Clause 15.2). \\
+\texttt{any} & The union of all value types. \\
+\texttt{never} & The empty type; an expression of type \texttt{never}
+does not return normally. \\
+\texttt{T?} & Shorthand for \texttt{T\ \textbar{}\ Null}. \\
+\texttt{T\ \textbar{}\ U} & The union of \texttt{T} and \texttt{U}. \\
+\end{longtable}
+
+\textbf{5.5.2} This document uses the following notation for native
+types, which are visible to the AOT compiler, the FFI, and intrinsic
+declarations.
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Notation & Meaning \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{f64} & IEEE 754 binary64. \\
+\texttt{i8}, \texttt{i16}, \texttt{i32}, \texttt{i64} & Signed
+two's-complement integers. \\
+\texttt{u8}, \texttt{u16}, \texttt{u32}, \texttt{u64} & Unsigned
+integers. \\
+\texttt{usize}, \texttt{isize} & Pointer-sized unsigned and signed
+integers. \\
+\texttt{bool} & A native boolean. \\
+\texttt{ptr\textless{}T\textgreater{}} & A raw pointer to \texttt{T}. \\
+\texttt{void} & No value. \\
+\end{longtable}
+
+\textbf{5.5.3} \texttt{T\ \textless{}:\ U} means that \texttt{T} is a
+subtype of \texttt{U}; every value of type \texttt{T} is also a value of
+type \texttt{U}. \texttt{T\ \textasciitilde{}\ U} means that \texttt{T}
+and \texttt{U} are consistent: their intersection is non-empty and
+values may flow between them under the rules of Clause 8.5.
+
+\textbf{5.5.4} \texttt{typeof(v)} denotes the dynamic type of value
+\texttt{v}. \texttt{IsCallable(v)} denotes whether \texttt{v} is a
+function or class constructor. \texttt{IsObject(v)} denotes whether
+\texttt{v} is an object.
+
+\subsection{5.6 Mathematical notation}\label{mathematical-notation}
+
+\textbf{5.6.1} \texttt{R} denotes the real numbers, \texttt{Z} the
+integers, and \texttt{B} the booleans.
+
+\textbf{5.6.2} A sequence is written
+\texttt{\textless{}a1,\ ...,\ an\textgreater{}}; an empty sequence is
+\texttt{\textless{}\textgreater{}}. The length of sequence \texttt{s} is
+\texttt{len(s)}. Indexing is zero-based and written \texttt{s{[}i{]}}.
+
+\textbf{5.6.3} A map is written
+\texttt{\{k1\ -\textgreater{}\ v1,\ ...,\ kn\ -\textgreater{}\ vn\}};
+\texttt{m{[}k{]}} denotes lookup and
+\texttt{m{[}k\ -\textgreater{}\ v{]}} denotes extension or update.
+
+\textbf{5.6.4} The interval \texttt{{[}a,\ b)} denotes the set of
+integers \texttt{x} such that \texttt{a\ ≤\ x\ \textless{}\ b}.
+\texttt{{[}a,\ b{]}} includes \texttt{b}.
+
+\textbf{5.6.5} \texttt{floor(x)} denotes the largest integer less than
+or equal to \texttt{x}; \texttt{trunc(x)} denotes the integer part of
+\texttt{x} toward zero.
+
+\textbf{5.6.6} \texttt{SameValue(x,\ y)} denotes the specification
+equality relation of Clause 8.9. \texttt{SameValueZero(x,\ y)} is
+\texttt{SameValue} except that it treats \texttt{+0} and \texttt{-0} as
+equal.
+
+\subsection{5.7 Normative and informative
+marking}\label{normative-and-informative-marking}
+
+\textbf{5.7.1} A clause is normative unless its heading or introductory
+paragraph marks it informative. Annexes A through D are normative;
+Annexes E through G are informative.
+
+\textbf{5.7.2} Within a normative clause, a paragraph beginning with
+\textbf{NOTE} is informative and does not create a requirement.
+
+\textbf{5.7.3} Examples are informative unless the example is introduced
+as a normative test vector.
+
+\subsection{5.8 Document versioning}\label{document-versioning}
+
+\textbf{5.8.1} This document is Edition 1.0, Draft. Clause numbers are
+stable within the edition. An erratum MUST NOT renumber a clause; it MAY
+add subclauses with a new final component.
+
+\textbf{5.8.2} A future edition MAY renumber clauses only if it
+publishes a migration table mapping old clause numbers to new ones.
+
+\section{6 Overview}\label{overview}
+
+\subsection{6.1 Language identity}\label{language-identity}
+
+\textbf{6.1.1} Dryad is a statically scoped, dynamically typed,
+multi-paradigm programming language. It supports procedural,
+object-oriented, and functional programming in a single surface syntax.
+
+\textbf{6.1.2} Dryad source text is compiled to an internal program
+representation and may be executed by three interchangeable tiers: a
+tree-walking interpreter, a bytecode virtual machine, or an
+ahead-of-time compiled native binary.
+
+\textbf{6.1.3} The language provides first-class functions, closures,
+classes with single inheritance, interfaces, modules, exceptions,
+asynchronous functions, operating-system threads, mutexes, a foreign
+function interface, and a standard library written entirely in Dryad.
+
+\subsection{6.2 Design axioms}\label{design-axioms}
+
+\emph{This subclause is informative. The axioms guide interpretation
+where this document leaves room for judgement; they do not override an
+explicit requirement.}
+
+\textbf{Axiom 1 --- Clarity over performance.} Readability and
+predictable behaviour take precedence over premature optimisation. An
+optimisation is conforming only if it preserves observable behaviour.
+
+\textbf{Axiom 2 --- Syntactic consistency.} Syntactic constructs follow
+uniform, predictable patterns. Similar operations use similar notation.
+
+\textbf{Axiom 3 --- Informative errors.} Every error reports a category,
+a numeric code, a source location, and, where the cause is determinable,
+a suggested correction (Clause 14).
+
+\textbf{Axiom 4 --- Composability.} Language primitives combine without
+special cases. A value of a given type may be used wherever that type is
+accepted.
+
+\textbf{Axiom 5 --- Zero surprises.} Every construct has exactly one
+specified behaviour. The implementation MUST NOT depend on unspecified
+state, ambient configuration, or evaluation order that this document
+leaves undefined.
+
+\subsection{6.3 Surface language}\label{surface-language}
+
+\textbf{6.3.1} A minimal Dryad program is a sequence of statements. The
+following program is well-formed and prints \texttt{42}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{function answer() \{}
+\NormalTok{    return 42;}
+\NormalTok{\}}
+
+\NormalTok{print(answer());}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{6.3.2} The principal syntactic categories are:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3571}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3571}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2857}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Category
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Examples
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Clause
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Declarations & \texttt{let}, \texttt{const}, \texttt{function},
+\texttt{class}, \texttt{import}, \texttt{export} & 10--12 \\
+Statements & \texttt{if}, \texttt{while}, \texttt{for}, \texttt{try},
+\texttt{return}, \texttt{throw} & 10 \\
+Expressions & operators, calls, member access, \texttt{match}, arrow
+functions & 9 \\
+Types & primitives, arrays, tuples, functions, classes, native types &
+8 \\
+Modules & named, namespace, side-effect, and identifier imports & 12 \\
+Directives & \texttt{\#\textless{}io\textgreater{}},
+\texttt{"use\ strict\ types"}, \texttt{@compile(...)} & 7, 8, 13 \\
+\end{longtable}
+
+\subsection{6.4 Execution architecture}\label{execution-architecture}
+
+\textbf{6.4.1} A conforming implementation MUST provide at least one
+execution tier and SHOULD provide all three. The tiers are:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2308}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2692}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Tier
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Input
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Requirement
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Interpreter & Abstract syntax tree & Evaluate the tree directly. \\
+Bytecode VM & Bytecode module (Clause 19) & Execute verified
+bytecode. \\
+AOT & Native object code (Clause 20) & Execute ahead-of-time compiled
+code. \\
+\end{longtable}
+
+\textbf{6.4.2} All tiers MUST be observationally equivalent for every
+well-formed program. Tier selection is not observable except through the
+timing and the diagnostic facilities explicitly defined in Clause 20.
+
+\textbf{6.4.3} The interpreter MUST collect the runtime type
+observations required by the metadata header of Clause 19.8 when the
+implementation also provides a bytecode or AOT tier. An implementation
+that provides only the interpreter is not required to emit metadata.
+
+\textbf{6.4.4} The \texttt{@compile} decorator (Clause 13.9) selects the
+execution tier for a function or block. In the absence of a decorator,
+the tier is selected by the implementation or by the implementation's
+command-line interface.
+
+\subsection{6.5 Native boundary and
+self-hosting}\label{native-boundary-and-self-hosting}
+
+\textbf{6.5.1} A Dryad implementation consists of a native runtime and a
+standard library. The native runtime MUST expose only the intrinsics
+specified in Clause 17.3 and Annex C. The standard library MUST be
+implemented in pure Dryad and MUST obtain all host services through
+those intrinsics.
+
+\textbf{6.5.2} An implementation MAY provide additional host facilities
+through the foreign function interface of Clause 16. Such facilities are
+not part of the standard library and do not extend the intrinsic set.
+
+\textbf{6.5.3} The native runtime MUST NOT contain language-specific
+standard library logic beyond the intrinsics. In particular, collection
+types, formatting, HTTP, JSON, cryptography, and path handling are
+implemented in Dryad.
+
+\subsection{6.6 Document organisation}\label{document-organisation}
+
+\textbf{6.6.1} The normative clauses are organised by language layer.
+Clauses 7--12 define the source language: lexical structure, values and
+types, expressions, statements, declarations, and modules. Clause 13
+defines how those constructs execute. Clause 14 defines errors. Clause
+15 defines concurrency. Clauses 16 and 17 define the native boundary.
+Clause 18 defines the library. Clauses 19 and 20 define the compiled
+representations.
+
+\textbf{6.6.2} Clause 22 contains the complete grammar. A production in
+Clause 22 is normative. Syntax shown in other clauses is explanatory and
+MUST agree with Clause 22; if it does not, Clause 22 prevails and the
+discrepancy is an erratum.
+
+\textbf{6.6.3} Annex A is the error-code registry. Annex B is the opcode
+registry. Annex C is the intrinsic registry. Annex D is the
+standard-library index. Annex E records editorial decisions against the
+conventions draft. Annex F is the informative proposals annex. Annex G
+is the bibliography.
+
+\end{document}

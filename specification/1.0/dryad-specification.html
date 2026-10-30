@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Pedro Kaleb" />
+  <title>Dryad Language Specification</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="assets/spec.css" />
+</head>
+<body>
+<div class="spec-layout">
+  <aside class="spec-sidebar">
+    <a class="spec-brand" href="#title-block-header">
+      <img src="assets/dryad-logo.png" alt="Dryad logo" />
+      <span>Dryad<br />Specification</span>
+    </a>
+    <nav id="TOC" role="doc-toc">
+      <h2>Contents</h2>
+<ul>
+<li><a href="#scope" id="toc-scope">1 Scope</a></li>
+<li><a href="#conformance" id="toc-conformance">2 Conformance</a></li>
+<li><a href="#normative-references" id="toc-normative-references">3
+Normative References</a></li>
+<li><a href="#terms-and-definitions" id="toc-terms-and-definitions">4
+Terms and Definitions</a></li>
+<li><a href="#notational-conventions" id="toc-notational-conventions">5
+Notational Conventions</a>
+<ul>
+<li><a href="#normative-keywords" id="toc-normative-keywords">5.1
+Normative keywords</a></li>
+<li><a href="#grammar-notation" id="toc-grammar-notation">5.2 Grammar
+notation</a></li>
+<li><a href="#algorithm-conventions" id="toc-algorithm-conventions">5.3
+Algorithm conventions</a></li>
+<li><a href="#completion-records" id="toc-completion-records">5.4
+Completion records</a></li>
+<li><a href="#type-notation" id="toc-type-notation">5.5 Type
+notation</a></li>
+<li><a href="#mathematical-notation" id="toc-mathematical-notation">5.6
+Mathematical notation</a></li>
+<li><a href="#normative-and-informative-marking"
+id="toc-normative-and-informative-marking">5.7 Normative and informative
+marking</a></li>
+<li><a href="#document-versioning" id="toc-document-versioning">5.8
+Document versioning</a></li>
+</ul></li>
+<li><a href="#overview" id="toc-overview">6 Overview</a>
+<ul>
+<li><a href="#language-identity" id="toc-language-identity">6.1 Language
+identity</a></li>
+<li><a href="#design-axioms" id="toc-design-axioms">6.2 Design
+axioms</a></li>
+<li><a href="#surface-language" id="toc-surface-language">6.3 Surface
+language</a></li>
+<li><a href="#execution-architecture"
+id="toc-execution-architecture">6.4 Execution architecture</a></li>
+<li><a href="#native-boundary-and-self-hosting"
+id="toc-native-boundary-and-self-hosting">6.5 Native boundary and
+self-hosting</a></li>
+<li><a href="#document-organisation" id="toc-document-organisation">6.6
+Document organisation</a></li>
+</ul></li>
+</ul>
+    </nav>
+    <div class="spec-sidebar-footer">
+      Edition 1.0 &middot; Draft<br />
+      <a href="dryad-specification.pdf">PDF edition</a> &middot;
+      <a href="https://github.com/dryadlang/docs">Source</a>
+    </div>
+  </aside>
+  <main class="spec-main">
+    <header id="title-block-header" class="spec-cover">
+      <div class="kicker">Dryad Language Project &middot; Normative Specification</div>
+      <h1 class="title">Dryad Language Specification</h1>
+      <div class="meta">
+        <strong>Edition:</strong> 1.0 (Draft) &middot;
+        <strong>Status:</strong> Draft Standard<br />
+        <strong>Editor:</strong> Pedro Kaleb &middot;
+        <strong>Date:</strong> October 2026
+      </div>
+      <div class="spec-abstract">
+        <span class="label">Abstract</span>
+<p>This document specifies the Dryad programming language: its lexical
+grammar, type system, expressions, statements, declarations, module
+system, execution model, error model, concurrency primitives, foreign
+function interface, runtime architecture, standard library, bytecode
+instruction set, and ahead-of-time compilation pipeline. It is the
+normative reference for implementors of Dryad and supersedes the Dryad
+Conventions 1.0 draft as the authoritative specification.</p>
+      </div>
+    </header>
+<h1 class="unlisted" id="status-of-this-document">Status of This
+Document</h1>
+<p><strong>Document identifier.</strong> DRYAD-SPEC-1.0-DRAFT.</p>
+<p><strong>Status.</strong> Draft Standard. This edition is complete for
+review but is not yet a ratified standard. Implementations claiming
+conformance to this edition MUST identify the edition and the
+conformance class they implement (Clause 2).</p>
+<p><strong>Normative content.</strong> Clauses 1 through 20 and Annexes
+A through D are normative. The Introduction, Clause 21, Clause 24, and
+Annexes E through G are informative. A clause or annex is normative
+unless it is explicitly marked <em>informative</em>. Within normative
+clauses, text marked <strong>NOTE</strong> is informative.</p>
+<p><strong>Relationship to prior documents.</strong> This document
+consolidates and replaces the content of <em>Dryad Conventions 1.0</em>
+(the <code>conventions</code> publication). It also supersedes <em>Dryad
+Theoretical Foundation v2.0</em> as the authoritative language
+specification; the v2 document is retained as an informative
+architecture paper. Where this document and any prior document disagree,
+this document prevails.</p>
+<p><strong>Editorial decisions.</strong> The conventions draft contains
+internal inconsistencies. Every deliberate resolution is recorded in
+Annex E. An implementation that follows Annex E is following this
+specification, not deviating from it.</p>
+<p><strong>Change control.</strong> Changes to normative content require
+a new edition or a published erratum. Editorial changes that do not
+alter normative behaviour may be published as a revision of the same
+edition.</p>
+<p><strong>Licence.</strong> This specification is published under the
+MIT Licence.</p>
+<h1 class="unlisted" id="introduction">Introduction</h1>
+<p><em>This Introduction is informative.</em></p>
+<p>Dryad is a multi-paradigm programming language designed for clarity,
+portability, and deterministic execution. Its syntax is deliberately
+close to JavaScript and TypeScript, while its runtime architecture
+borrows the micro-kernel discipline of systems languages: a small native
+core exposes a fixed set of intrinsics, and the entire standard library
+is written in Dryad itself.</p>
+<p>The language is defined by the interaction of four layers:</p>
+<ol type="1">
+<li><strong>Source language.</strong> A statically scoped, dynamically
+typed language with optional strict typing.</li>
+<li><strong>Execution tiers.</strong> A tree-walking interpreter, a
+stack-based bytecode virtual machine, and an ahead-of-time compiler. The
+tiers are required to be observationally equivalent.</li>
+<li><strong>Native boundary.</strong> A minimal, explicitly specified
+intrinsic interface through which all operating-system interaction
+occurs.</li>
+<li><strong>Standard library.</strong> Pure Dryad modules that define
+the user-visible platform, including I/O, networking, collections,
+concurrency, and diagnostics.</li>
+</ol>
+<p>This specification is written for implementors. It does not teach the
+language, and it does not describe the current implementation. It
+defines what a conforming implementation MUST do. Where the current
+implementation differs, the implementation is non-conforming; Clause 24
+and Annex E identify known gaps for planning purposes.</p>
+<h2 id="design-goals">Design goals</h2>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 78%" />
+</colgroup>
+<thead>
+<tr>
+<th>Goal</th>
+<th>Normative consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Syntactic familiarity</td>
+<td>The surface grammar follows JavaScript/TypeScript conventions unless
+this document states otherwise.</td>
+</tr>
+<tr>
+<td>Paradigm flexibility</td>
+<td>Procedural, object-oriented, and functional constructs are
+first-class and freely composable.</td>
+</tr>
+<tr>
+<td>Optional typing</td>
+<td>Dynamic typing is the default; strict typing is opt-in per module,
+function, or declaration.</td>
+</tr>
+<tr>
+<td>Triple execution</td>
+<td>The interpreter, bytecode VM, and AOT compiler MUST preserve the
+same observable semantics.</td>
+</tr>
+<tr>
+<td>Native concurrency</td>
+<td>Threads, mutexes, and asynchronous functions are language
+primitives, not library add-ons.</td>
+</tr>
+<tr>
+<td>Self-hosting</td>
+<td>The standard library MUST be written in pure Dryad and MUST use only
+the specified intrinsics.</td>
+</tr>
+<tr>
+<td>Zero surprises</td>
+<td>Every construct in this document has exactly one defined behaviour;
+undefined behaviour is not permitted.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="reading-guide">Reading guide</h2>
+<p>A reader implementing an interpreter SHOULD read Clauses 1–15 in
+order. A reader implementing the bytecode VM SHOULD additionally read
+Clause 19. A reader implementing the AOT compiler SHOULD read Clauses 19
+and 20. A reader implementing the standard library SHOULD read Clauses
+8, 14, 17, and 18.</p>
+<h1 id="scope">1 Scope</h1>
+<p><strong>1.1</strong> This document specifies the syntax, static
+semantics, and runtime semantics of the Dryad programming language,
+together with the normative requirements for its execution engines,
+native runtime interface, standard library, bytecode format, and
+ahead-of-time compilation pipeline.</p>
+<p><strong>1.2</strong> This document specifies the observable behaviour
+of a conforming implementation. Observable behaviour comprises:</p>
+<ol type="1">
+<li>the result of evaluating every well-formed program;</li>
+<li>the sequence of side effects produced during evaluation;</li>
+<li>the errors and diagnostics reported for ill-formed programs;</li>
+<li>the values returned by standard-library functions; and</li>
+<li>the concurrency guarantees defined in Clause 15.</li>
+</ol>
+<p><strong>1.3</strong> This document does not specify:</p>
+<ol type="1">
+<li>the hardware, operating system, or host environment on which an
+implementation runs, except where a boundary is explicitly defined;</li>
+<li>the internal data structures, algorithms, or source-code
+organisation of an implementation;</li>
+<li>user interfaces, editors, debuggers, package registries, or build
+tools, except where their behaviour is observable through a normative
+interface;</li>
+<li>the contents of third-party libraries; or</li>
+<li>performance, except where a normative requirement is explicitly
+stated.</li>
+</ol>
+<p><strong>1.4</strong> A program is <em>well-formed</em> if it
+satisfies every early error rule in this document. A well-formed program
+has exactly one specified behaviour. This document does not define
+undefined behaviour; where a program violates a precondition, the
+implementation MUST report a runtime error as specified in Clause
+14.</p>
+<p><strong>1.5</strong> The unit of conformance is a <em>conforming
+implementation</em>, as defined in Clause 2. Conformance is claimed per
+conformance class, not per feature.</p>
+<p><strong>1.6</strong> This document is organised as follows:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Clauses</th>
+<th>Subject</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1–6</td>
+<td>Scope, conformance, references, terminology, notation, overview</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Lexical grammar</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Types and values</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Expressions</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Statements</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Functions and classes</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Modules</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Execution model</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Error system</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Concurrency model</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Foreign function interface</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Runtime architecture and intrinsics</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Standard library</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Bytecode and intermediate representation</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Ahead-of-time compilation</td>
+</tr>
+<tr>
+<td>21–24</td>
+<td>Paradigms, formal grammar, conformance testing, limitations</td>
+</tr>
+<tr>
+<td>Annexes A–G</td>
+<td>Registries, editorial decisions, proposals, bibliography</td>
+</tr>
+</tbody>
+</table>
+<h1 id="conformance">2 Conformance</h1>
+<p><strong>2.1</strong> A <em>conforming implementation</em> is a
+program that implements every normative requirement of this document for
+at least one conformance class, and that does not contradict any other
+normative requirement.</p>
+<p><strong>2.2</strong> This document defines four conformance
+classes.</p>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 22%" />
+<col style="width: 36%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr>
+<th>Class</th>
+<th>Identifier</th>
+<th>Required clauses</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core</td>
+<td><code>core-1.0</code></td>
+<td>7–18</td>
+<td>Lexical analysis, parsing, static semantics, interpretation,
+modules, errors, concurrency, FFI, runtime interface, standard
+library.</td>
+</tr>
+<tr>
+<td>Virtual Machine</td>
+<td><code>vm-1.0</code></td>
+<td>7–19</td>
+<td>Core, plus the bytecode compiler, bytecode verifier, and bytecode
+VM.</td>
+</tr>
+<tr>
+<td>Ahead-of-Time</td>
+<td><code>aot-1.0</code></td>
+<td>7–20</td>
+<td>Core, plus the bytecode pipeline and the AOT compiler.</td>
+</tr>
+<tr>
+<td>Full</td>
+<td><code>full-1.0</code></td>
+<td>7–20</td>
+<td>Core, VM, and AOT in a single implementation.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>2.3</strong> An implementation that claims a conformance
+class MUST:</p>
+<ol type="1">
+<li>accept every program that this document classifies as
+well-formed;</li>
+<li>reject every program that this document classifies as ill-formed,
+with a diagnostic as specified in Clause 14;</li>
+<li>produce the specified result for every well-formed program;</li>
+<li>preserve the concurrency guarantees of Clause 15; and</li>
+<li>satisfy every MUST or MUST NOT requirement in the clauses required
+by its class.</li>
+</ol>
+<p><strong>2.4</strong> An implementation MAY provide extensions
+provided that all of the following hold:</p>
+<ol type="1">
+<li>the extension is not observable in a program that uses only the
+constructs specified in this document;</li>
+<li>the extension does not alter the meaning of any specified
+construct;</li>
+<li>the implementation documents the extension and the conditions under
+which it is active; and</li>
+<li>disabling the extension restores a conforming implementation.</li>
+</ol>
+<p>An implementation MUST NOT use the availability of an extension to
+justify a deviation from a normative requirement.</p>
+<p><strong>2.5</strong> Certain behaviours are designated
+<em>implementation-defined</em> or <em>implementation-dependent</em>.
+For implementation-defined behaviour, a conforming implementation MUST
+document the chosen behaviour. For implementation-dependent behaviour,
+the implementation may choose freely and is not required to document the
+choice. This document identifies such behaviours explicitly; no other
+behaviour is implementation-defined or implementation-dependent.</p>
+<p><strong>2.6</strong> A conforming implementation SHOULD pass the
+conformance test suite maintained by the Dryad Language Project for its
+claimed class. Passing the test suite is evidence of conformance but is
+not a substitute for the normative requirements of this document.</p>
+<p><strong>2.7</strong> An implementation MUST report its edition and
+conformance class when invoked with <code>--version</code> or an
+equivalent mechanism. The report MUST identify this document as
+<code>DRYAD-SPEC-1.0-DRAFT</code>.</p>
+<p><strong>2.8</strong> Conformance is not affected by:</p>
+<ol type="1">
+<li>the execution tier used to evaluate a program, provided the
+observable behaviour is preserved;</li>
+<li>the host operating system, provided the specified platform
+abstractions are implemented;</li>
+<li>the presence or absence of optional optimisations; or</li>
+<li>the textual form of a diagnostic, provided it contains the
+information required by Clause 14.</li>
+</ol>
+<p><strong>2.9</strong> An implementation that cannot support a required
+facility on a given host MUST reject programs that require that facility
+at the earliest specified point, with an error of category
+<em>unsupported</em> (Clause 14). Silent degradation is not
+conforming.</p>
+<h1 id="normative-references">3 Normative References</h1>
+<p><strong>3.1</strong> The following documents are indispensable for
+the application of this specification. For dated references, only the
+cited edition applies. For undated references, the latest edition
+applies.</p>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 17%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr>
+<th>Reference</th>
+<th>Title</th>
+<th>Use in this document</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RFC 2119</td>
+<td>Key words for use in RFCs to Indicate Requirement Levels</td>
+<td>Normative keywords (Clause 5.1)</td>
+</tr>
+<tr>
+<td>RFC 8174</td>
+<td>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</td>
+<td>Normative keyword interpretation</td>
+</tr>
+<tr>
+<td>RFC 3629</td>
+<td>UTF-8, a transformation format of ISO 10646</td>
+<td>Source-text encoding (Clause 7.1)</td>
+</tr>
+<tr>
+<td>ISO/IEC 10646</td>
+<td>Information technology — Universal Coded Character Set (UCS)</td>
+<td>Character repertoire</td>
+</tr>
+<tr>
+<td>The Unicode Standard</td>
+<td>Version 15.1 or later</td>
+<td>Character properties, identifier classes</td>
+</tr>
+<tr>
+<td>IEEE 754-2019</td>
+<td>IEEE Standard for Floating-Point Arithmetic</td>
+<td>Number semantics (Clause 8.2.3)</td>
+</tr>
+<tr>
+<td>ISO/IEC 9899:2018</td>
+<td>Programming languages — C</td>
+<td>Foreign function interface ABI (Clause 16)</td>
+</tr>
+<tr>
+<td>System V ABI</td>
+<td>System V Application Binary Interface, x86-64 and ARM64
+editions</td>
+<td>Calling conventions (Clauses 16, 20)</td>
+</tr>
+<tr>
+<td>ELF gABI</td>
+<td>System V gABI, Object File Format</td>
+<td>AOT object output (Clause 20)</td>
+</tr>
+<tr>
+<td>PE/COFF</td>
+<td>Microsoft Portable Executable and Common Object File Format</td>
+<td>AOT object output (Clause 20)</td>
+</tr>
+<tr>
+<td>ECMA-262</td>
+<td>ECMAScript Language Specification</td>
+<td>Informative reference for algorithm style and grammar notation</td>
+</tr>
+</tbody>
+</table>
+<p><strong>3.2</strong> The following documents are informative
+references. They describe the design context of this specification but
+do not create conformance requirements.</p>
+<table>
+<thead>
+<tr>
+<th>Reference</th>
+<th>Title</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DRYAD-TF-2.0</td>
+<td>Dryad Theoretical Foundation, version 2.0</td>
+</tr>
+<tr>
+<td>DRYAD-CONV-1.0</td>
+<td>Dryad Conventions, version 1.0 (superseded)</td>
+</tr>
+<tr>
+<td>LLVM Language Reference Manual</td>
+<td>LLVM IR used by the AOT pipeline</td>
+</tr>
+<tr>
+<td>OpenSSL documentation</td>
+<td>TLS backend named by the standard library</td>
+</tr>
+<tr>
+<td>POSIX.1-2017</td>
+<td>Portable Operating System Interface</td>
+</tr>
+</tbody>
+</table>
+<p><strong>3.3</strong> Where a normative reference is updated, the
+Dryad Language Project MAY publish an erratum adopting the update. Until
+such an erratum is published, the dated edition cited in Clause 3.1
+applies.</p>
+<h1 id="terms-and-definitions">4 Terms and Definitions</h1>
+<p>For the purposes of this document, the following terms and
+definitions apply. Terms are listed alphabetically. Cross-references use
+clause numbers.</p>
+<p><strong>Abstract operation.</strong> A named algorithm defined by
+this document. Abstract operations are not callable from Dryad source
+text; they define semantics.</p>
+<p><strong>Agent.</strong> An independent unit of execution with its own
+execution context and job queue. A Dryad program executes in at least
+one agent. Threads created by <code>thread function</code> execute in
+separate agents (Clause 15).</p>
+<p><strong>AOT compilation.</strong> Ahead-of-time compilation:
+translation of a Dryad program to native code before execution, as
+specified in Clause 20.</p>
+<p><strong>Binding.</strong> The association between an identifier and a
+value within an environment record.</p>
+<p><strong>Buffer.</strong> A contiguous, bounds-checked byte region
+with an explicit length and capacity (Clause 17.5).</p>
+<p><strong>Bytecode.</strong> The stack-based instruction format defined
+in Clause 19.</p>
+<p><strong>Call frame.</strong> The runtime record that stores the state
+of an active function invocation.</p>
+<p><strong>Class.</strong> A value that defines a nominal object type,
+its constructor, its instance members, and its static members (Clause
+11).</p>
+<p><strong>Completion record.</strong> A specification value that
+records how evaluation of a statement or expression terminated. A
+completion record is one of <em>normal</em>, <em>break</em>,
+<em>continue</em>, <em>return</em>, or <em>throw</em> (Clause 10.2).</p>
+<p><strong>Conforming implementation.</strong> An implementation that
+satisfies Clause 2.</p>
+<p><strong>Directive.</strong> A syntactic construct beginning with
+<code>#</code> that instructs the implementation, such as a
+native-module directive <code>#&lt;io&gt;</code> (Clause 7.10), or a
+string-literal directive such as <code>"use strict types"</code> (Clause
+8.6).</p>
+<p><strong>Dynamic type.</strong> The type of a value at runtime. Every
+value has exactly one dynamic type (Clause 8).</p>
+<p><strong>Early error.</strong> A condition that makes a program
+ill-formed and that MUST be detected before execution, during parsing or
+static analysis (Clause 14.8).</p>
+<p><strong>Environment record.</strong> A specification data structure
+that maps identifiers to bindings and that may have an outer environment
+reference (Clause 13.2).</p>
+<p><strong>Execution context.</strong> The specification state
+associated with the evaluation of a program, module, function, or block.
+An execution context includes a lexical environment, a variable
+environment, and a <code>this</code> binding (Clause 13.2).</p>
+<p><strong>Export.</strong> A binding made available by a module to
+importing modules (Clause 12.3).</p>
+<p><strong>Expression.</strong> A syntactic construct that evaluates to
+a value (Clause 9).</p>
+<p><strong>FFI.</strong> Foreign function interface: the boundary
+between Dryad and code implemented in another language (Clause 16).</p>
+<p><strong>Function.</strong> A callable value with a parameter list, a
+body, and a captured lexical environment (Clause 11).</p>
+<p><strong>HAL.</strong> Hardware abstraction layer: the small set of
+platform-specific operations beneath the intrinsic layer (Clause
+17.4).</p>
+<p><strong>Host.</strong> The environment in which a conforming
+implementation executes, including its operating system, filesystem,
+network stack, and clock.</p>
+<p><strong>Identifier.</strong> A lexical token that names a binding,
+property, label, or module (Clause 7.5).</p>
+<p><strong>Implementation-defined.</strong> A behaviour for which a
+conforming implementation MUST document its choice (Clause 2.5).</p>
+<p><strong>Implementation-dependent.</strong> A behaviour for which a
+conforming implementation may choose freely without documentation
+(Clause 2.5).</p>
+<p><strong>Intrinsic.</strong> A primitive operation exposed by the
+runtime and declared in Dryad with <code>@intrinsic</code> (Clause
+17.2).</p>
+<p><strong>Job.</strong> A unit of work scheduled on an agent’s job
+queue, used to implement promises and asynchronous functions (Clause
+15.4).</p>
+<p><strong>Lexical grammar.</strong> The grammar that defines how source
+text is divided into tokens (Clause 7).</p>
+<p><strong>Lexical token.</strong> An indivisible lexical unit produced
+by the lexer (Clause 7.4).</p>
+<p><strong>Module.</strong> A source-text unit with its own scope,
+exports, and module record (Clause 12).</p>
+<p><strong>Module record.</strong> The specification data structure that
+records a module’s exports, imports, and evaluation state (Clause
+12.1).</p>
+<p><strong>Module specifier.</strong> The string or identifier that
+names a module in an import declaration (Clause 12.4).</p>
+<p><strong>Native directive.</strong> The token
+<code>#&lt;identifier&gt;</code> that loads a native module (Clause
+7.10).</p>
+<p><strong>Native module.</strong> A host-implemented module exposed
+through the FFI or the intrinsic layer (Clauses 16, 17).</p>
+<p><strong>Native type.</strong> A machine-level type used by the
+runtime, AOT compiler, and FFI, such as <code>f64</code>,
+<code>i32</code>, or <code>usize</code> (Clause 8.3).</p>
+<p><strong>Normal completion.</strong> A completion record indicating
+that evaluation continued to the next construct without an abrupt
+transfer of control (Clause 10.2).</p>
+<p><strong>Object.</strong> A value that groups properties and has an
+identity independent of its contents (Clause 8.3).</p>
+<p><strong>Observable behaviour.</strong> The behaviour listed in Clause
+1.2.</p>
+<p><strong>Program.</strong> A collection of one or more modules, one of
+which is the entry module. Execution begins at the entry module (Clause
+13.7).</p>
+<p><strong>Promise.</strong> A value representing the eventual result of
+an asynchronous operation (Clause 15.3).</p>
+<p><strong>Property.</strong> A named or indexed member of an
+object.</p>
+<p><strong>Realm.</strong> The set of intrinsic objects and global
+bindings associated with an agent. A realm is created when an agent is
+created (Clause 13.1).</p>
+<p><strong>Scope.</strong> The region of source text in which a binding
+is visible, together with the rules that determine visibility (Clause
+13.3).</p>
+<p><strong>Shape.</strong> A compiler-internal description of an
+object’s property layout, used by the AOT compiler (Clause 20.4).</p>
+<p><strong>Source text.</strong> A sequence of Unicode code points
+encoded in UTF-8 (Clause 7.1).</p>
+<p><strong>Standard library (STDLIB).</strong> The collection of modules
+specified in Clause 18 and implemented in pure Dryad.</p>
+<p><strong>Statement.</strong> A syntactic construct that performs an
+action and produces a completion record rather than a value (Clause
+10).</p>
+<p><strong>Static semantics.</strong> Rules that constrain well-formed
+programs and that are enforced before execution, including early errors
+and type checking (Clauses 8, 22).</p>
+<p><strong>Strict mode.</strong> The optional static typing mode enabled
+by <code>"use strict types"</code> (Clause 8.6).</p>
+<p><strong>Syscall.</strong> A primitive operation in the intrinsic set
+that corresponds to an operating-system service (Clause 17.3).</p>
+<p><strong>Thread.</strong> An independent agent created by a
+<code>thread function</code> declaration or a thread-creation operation
+(Clause 15.1).</p>
+<p><strong>Type.</strong> A set of values. The dynamic type of a value
+determines the operations that are defined on it (Clause 8).</p>
+<p><strong>Type annotation.</strong> A syntactic type expression
+attached to a declaration, parameter, return position, or expression
+(Clause 8.4).</p>
+<p><strong>Value.</strong> A member of a Dryad type. Values are the
+results of expressions and the contents of bindings (Clause 8).</p>
+<p><strong>Variable.</strong> A binding whose value may be changed after
+declaration.</p>
+<p><strong>Well-formed program.</strong> A program that satisfies every
+early error rule of this document (Clause 1.4).</p>
+<h1 id="notational-conventions">5 Notational Conventions</h1>
+<h2 id="normative-keywords">5.1 Normative keywords</h2>
+<p><strong>5.1.1</strong> The key words MUST, MUST NOT, REQUIRED, SHALL,
+SHALL NOT, SHOULD, SHOULD NOT, RECOMMENDED, NOT RECOMMENDED, MAY, and
+OPTIONAL in this document are to be interpreted as described in RFC 2119
+and RFC 8174.</p>
+<p><strong>5.1.2</strong> These keywords are normative only when they
+appear in uppercase. Lowercase uses of the same words are
+descriptive.</p>
+<p><strong>5.1.3</strong> A requirement stated without a keyword is
+normative if it appears in a normative clause and describes observable
+behaviour, a well-formedness condition, or a conformance
+requirement.</p>
+<p><strong>5.1.4</strong> The word <em>can</em> describes possibility;
+the word <em>cannot</em> describes impossibility under this
+specification. Neither word creates an optional implementation
+choice.</p>
+<h2 id="grammar-notation">5.2 Grammar notation</h2>
+<p><strong>5.2.1</strong> Grammars in this document use an extended
+Backus–Naur form (EBNF) with the following metacharacters.</p>
+<table>
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr>
+<th>Notation</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>::=</code></td>
+<td>Production definition.</td>
+</tr>
+<tr>
+<td><code>&lt;name&gt;</code></td>
+<td>Nonterminal symbol <code>name</code>.</td>
+</tr>
+<tr>
+<td><code>"text"</code></td>
+<td>Terminal symbol consisting of the exact characters
+<code>text</code>.</td>
+</tr>
+<tr>
+<td><code>A \| B</code></td>
+<td>Alternative: either <code>A</code> or <code>B</code>.</td>
+</tr>
+<tr>
+<td><code>[ A ]</code></td>
+<td>Optional occurrence of <code>A</code> (zero or one).</td>
+</tr>
+<tr>
+<td><code>{ A }</code></td>
+<td>Repetition of <code>A</code> (zero or more).</td>
+</tr>
+<tr>
+<td><code>( A )</code></td>
+<td>Grouping.</td>
+</tr>
+<tr>
+<td><code>ε</code></td>
+<td>The empty production.</td>
+</tr>
+<tr>
+<td><code>(* text *)</code></td>
+<td>Informative comment inside a grammar.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>5.2.2</strong> A production of the form
+<code>&lt;A&gt; ::= &lt;B&gt; { "," &lt;B&gt; }</code> denotes a
+possibly empty comma-separated sequence of <code>&lt;B&gt;</code>. A
+trailing comma is permitted only where a production says so
+explicitly.</p>
+<p><strong>5.2.3</strong> Lexical grammar productions are identified by
+the prefix <code>Lexical</code> and are defined in Clause 7. Syntactic
+grammar productions are defined in Clause 22 and referenced throughout
+this document. When a syntactic production references a token, the token
+name is written in angle brackets, for example
+<code>&lt;Identifier&gt;</code>.</p>
+<p><strong>5.2.4</strong> The lexical grammar is applied before the
+syntactic grammar. The lexer consumes the longest sequence of input
+characters that forms a valid token, subject to the rules of Clause
+7.11. Whitespace and comments separate tokens but are not tokens
+themselves.</p>
+<p><strong>5.2.5</strong> A syntactic grammar is unambiguous if every
+well-formed token sequence has exactly one parse tree. This document
+defines an unambiguous grammar. An implementation MUST reject a token
+sequence for which no parse tree exists and MUST report an early error
+if more than one parse tree exists.</p>
+<p><strong>5.2.6</strong> Grammar productions do not by themselves
+impose evaluation order. Evaluation order is defined by the algorithms
+in Clauses 9 through 13.</p>
+<h2 id="algorithm-conventions">5.3 Algorithm conventions</h2>
+<p><strong>5.3.1</strong> Semantic algorithms are written as numbered
+steps. Steps are performed in order unless a step transfers control.</p>
+<p><strong>5.3.2</strong> The phrase <em>Let x be …</em> introduces a
+local specification variable <code>x</code>. Specification variables are
+distinct from Dryad variables and are not observable by a program.</p>
+<p><strong>5.3.3</strong> The phrase <em>If condition, then …</em>
+executes the indented steps when <code>condition</code> is true.
+<em>Otherwise</em> executes them when <code>condition</code> is false.
+<em>If condition, then …; otherwise …</em> is equivalent.</p>
+<p><strong>5.3.4</strong> The phrase <em>Return value</em> terminates
+the abstract operation and yields <code>value</code>. The phrase
+<em>Return</em> without a value yields the normal completion
+<code>Normal(empty)</code>.</p>
+<p><strong>5.3.5</strong> The phrase <em>Assert: condition</em> states
+an invariant that MUST hold whenever the algorithm reaches that step. A
+violation indicates an error in this specification or in a conforming
+implementation, not in the source program.</p>
+<p><strong>5.3.6</strong> An abstract operation whose name ends in
+<code>?</code> MAY return an abrupt completion. In an algorithm, the
+notation <code>result = Operation?</code> means: perform
+<code>Operation</code>; if it returns an abrupt completion, return that
+completion immediately; otherwise, assign its value to
+<code>result</code>.</p>
+<p><strong>5.3.7</strong> Abstract operations named in CamelCase, such
+as <code>GetValue</code> or <code>ResolveBinding</code>, are
+specification operations. They are not callable from Dryad source
+text.</p>
+<p><strong>5.3.8</strong> An algorithm MAY state that behaviour is
+<em>implementation-defined</em> or <em>implementation-dependent</em>.
+Those terms have the meanings given in Clause 2.5.</p>
+<h2 id="completion-records">5.4 Completion records</h2>
+<p><strong>5.4.1</strong> A completion record is a specification value
+of one of the following forms.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 37%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Form</th>
+<th>Payload</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Normal(value)</code></td>
+<td>A value or <code>empty</code></td>
+<td>Evaluation continued normally.</td>
+</tr>
+<tr>
+<td><code>Break(label)</code></td>
+<td>A label or <code>empty</code></td>
+<td>Control transfers to the matching labelled statement.</td>
+</tr>
+<tr>
+<td><code>Continue(label)</code></td>
+<td>A label or <code>empty</code></td>
+<td>Control transfers to the next iteration of the matching loop.</td>
+</tr>
+<tr>
+<td><code>Return(value)</code></td>
+<td>A value</td>
+<td>Control returns from the current function.</td>
+</tr>
+<tr>
+<td><code>Throw(value)</code></td>
+<td>A value</td>
+<td>An exception is propagating.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>5.4.2</strong> A completion record is <em>abrupt</em> if it
+is not <code>Normal</code>. A completion record is <em>empty</em> if it
+carries no value.</p>
+<p><strong>5.4.3</strong> Statement evaluation in Clause 10 yields
+completion records. Expression evaluation in Clause 9 yields values or
+throws; an expression never yields <code>Break</code>,
+<code>Continue</code>, or <code>Return</code>.</p>
+<h2 id="type-notation">5.5 Type notation</h2>
+<p><strong>5.5.1</strong> This document uses the following notation for
+value types.</p>
+<table>
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr>
+<th>Notation</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Null</code></td>
+<td>The type whose only value is <code>null</code>.</td>
+</tr>
+<tr>
+<td><code>Boolean</code></td>
+<td><code>true</code> and <code>false</code>.</td>
+</tr>
+<tr>
+<td><code>Number</code></td>
+<td>IEEE 754 binary64 values, including <code>NaN</code> and
+infinities.</td>
+</tr>
+<tr>
+<td><code>String</code></td>
+<td>Finite sequences of Unicode scalar values.</td>
+</tr>
+<tr>
+<td><code>Object</code></td>
+<td>Objects with identity, including arrays, tuples, functions, and
+class instances.</td>
+</tr>
+<tr>
+<td><code>Array&lt;T&gt;</code></td>
+<td>An ordered, dynamically sized sequence of <code>T</code>.</td>
+</tr>
+<tr>
+<td><code>Tuple&lt;T1, ..., Tn&gt;</code></td>
+<td>A fixed-length sequence with element types <code>T1</code> through
+<code>Tn</code>.</td>
+</tr>
+<tr>
+<td><code>Function&lt;P..., R&gt;</code></td>
+<td>A callable value with parameters <code>P...</code> and result
+<code>R</code>.</td>
+</tr>
+<tr>
+<td><code>Class&lt;C&gt;</code></td>
+<td>The type of instances of class <code>C</code>.</td>
+</tr>
+<tr>
+<td><code>Buffer</code></td>
+<td>The byte-buffer type of Clause 17.5.</td>
+</tr>
+<tr>
+<td><code>Promise&lt;T&gt;</code></td>
+<td>The asynchronous-result type of Clause 15.3.</td>
+</tr>
+<tr>
+<td><code>Result&lt;T, E&gt;</code></td>
+<td>A value that is either <code>Ok(T)</code> or <code>Err(E)</code>
+(Clause 8.3.7).</td>
+</tr>
+<tr>
+<td><code>Thread&lt;T&gt;</code></td>
+<td>A handle to a thread producing <code>T</code> (Clause 15.1).</td>
+</tr>
+<tr>
+<td><code>Mutex</code></td>
+<td>A mutual-exclusion primitive (Clause 15.2).</td>
+</tr>
+<tr>
+<td><code>any</code></td>
+<td>The union of all value types.</td>
+</tr>
+<tr>
+<td><code>never</code></td>
+<td>The empty type; an expression of type <code>never</code> does not
+return normally.</td>
+</tr>
+<tr>
+<td><code>T?</code></td>
+<td>Shorthand for <code>T | Null</code>.</td>
+</tr>
+<tr>
+<td><code>T | U</code></td>
+<td>The union of <code>T</code> and <code>U</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>5.5.2</strong> This document uses the following notation for
+native types, which are visible to the AOT compiler, the FFI, and
+intrinsic declarations.</p>
+<table>
+<thead>
+<tr>
+<th>Notation</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>f64</code></td>
+<td>IEEE 754 binary64.</td>
+</tr>
+<tr>
+<td><code>i8</code>, <code>i16</code>, <code>i32</code>,
+<code>i64</code></td>
+<td>Signed two’s-complement integers.</td>
+</tr>
+<tr>
+<td><code>u8</code>, <code>u16</code>, <code>u32</code>,
+<code>u64</code></td>
+<td>Unsigned integers.</td>
+</tr>
+<tr>
+<td><code>usize</code>, <code>isize</code></td>
+<td>Pointer-sized unsigned and signed integers.</td>
+</tr>
+<tr>
+<td><code>bool</code></td>
+<td>A native boolean.</td>
+</tr>
+<tr>
+<td><code>ptr&lt;T&gt;</code></td>
+<td>A raw pointer to <code>T</code>.</td>
+</tr>
+<tr>
+<td><code>void</code></td>
+<td>No value.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>5.5.3</strong> <code>T &lt;: U</code> means that
+<code>T</code> is a subtype of <code>U</code>; every value of type
+<code>T</code> is also a value of type <code>U</code>.
+<code>T ~ U</code> means that <code>T</code> and <code>U</code> are
+consistent: their intersection is non-empty and values may flow between
+them under the rules of Clause 8.5.</p>
+<p><strong>5.5.4</strong> <code>typeof(v)</code> denotes the dynamic
+type of value <code>v</code>. <code>IsCallable(v)</code> denotes whether
+<code>v</code> is a function or class constructor.
+<code>IsObject(v)</code> denotes whether <code>v</code> is an
+object.</p>
+<h2 id="mathematical-notation">5.6 Mathematical notation</h2>
+<p><strong>5.6.1</strong> <code>R</code> denotes the real numbers,
+<code>Z</code> the integers, and <code>B</code> the booleans.</p>
+<p><strong>5.6.2</strong> A sequence is written
+<code>&lt;a1, ..., an&gt;</code>; an empty sequence is
+<code>&lt;&gt;</code>. The length of sequence <code>s</code> is
+<code>len(s)</code>. Indexing is zero-based and written
+<code>s[i]</code>.</p>
+<p><strong>5.6.3</strong> A map is written
+<code>{k1 -&gt; v1, ..., kn -&gt; vn}</code>; <code>m[k]</code> denotes
+lookup and <code>m[k -&gt; v]</code> denotes extension or update.</p>
+<p><strong>5.6.4</strong> The interval <code>[a, b)</code> denotes the
+set of integers <code>x</code> such that <code>a ≤ x &lt; b</code>.
+<code>[a, b]</code> includes <code>b</code>.</p>
+<p><strong>5.6.5</strong> <code>floor(x)</code> denotes the largest
+integer less than or equal to <code>x</code>; <code>trunc(x)</code>
+denotes the integer part of <code>x</code> toward zero.</p>
+<p><strong>5.6.6</strong> <code>SameValue(x, y)</code> denotes the
+specification equality relation of Clause 8.9.
+<code>SameValueZero(x, y)</code> is <code>SameValue</code> except that
+it treats <code>+0</code> and <code>-0</code> as equal.</p>
+<h2 id="normative-and-informative-marking">5.7 Normative and informative
+marking</h2>
+<p><strong>5.7.1</strong> A clause is normative unless its heading or
+introductory paragraph marks it informative. Annexes A through D are
+normative; Annexes E through G are informative.</p>
+<p><strong>5.7.2</strong> Within a normative clause, a paragraph
+beginning with <strong>NOTE</strong> is informative and does not create
+a requirement.</p>
+<p><strong>5.7.3</strong> Examples are informative unless the example is
+introduced as a normative test vector.</p>
+<h2 id="document-versioning">5.8 Document versioning</h2>
+<p><strong>5.8.1</strong> This document is Edition 1.0, Draft. Clause
+numbers are stable within the edition. An erratum MUST NOT renumber a
+clause; it MAY add subclauses with a new final component.</p>
+<p><strong>5.8.2</strong> A future edition MAY renumber clauses only if
+it publishes a migration table mapping old clause numbers to new
+ones.</p>
+<h1 id="overview">6 Overview</h1>
+<h2 id="language-identity">6.1 Language identity</h2>
+<p><strong>6.1.1</strong> Dryad is a statically scoped, dynamically
+typed, multi-paradigm programming language. It supports procedural,
+object-oriented, and functional programming in a single surface
+syntax.</p>
+<p><strong>6.1.2</strong> Dryad source text is compiled to an internal
+program representation and may be executed by three interchangeable
+tiers: a tree-walking interpreter, a bytecode virtual machine, or an
+ahead-of-time compiled native binary.</p>
+<p><strong>6.1.3</strong> The language provides first-class functions,
+closures, classes with single inheritance, interfaces, modules,
+exceptions, asynchronous functions, operating-system threads, mutexes, a
+foreign function interface, and a standard library written entirely in
+Dryad.</p>
+<h2 id="design-axioms">6.2 Design axioms</h2>
+<p><em>This subclause is informative. The axioms guide interpretation
+where this document leaves room for judgement; they do not override an
+explicit requirement.</em></p>
+<p><strong>Axiom 1 — Clarity over performance.</strong> Readability and
+predictable behaviour take precedence over premature optimisation. An
+optimisation is conforming only if it preserves observable
+behaviour.</p>
+<p><strong>Axiom 2 — Syntactic consistency.</strong> Syntactic
+constructs follow uniform, predictable patterns. Similar operations use
+similar notation.</p>
+<p><strong>Axiom 3 — Informative errors.</strong> Every error reports a
+category, a numeric code, a source location, and, where the cause is
+determinable, a suggested correction (Clause 14).</p>
+<p><strong>Axiom 4 — Composability.</strong> Language primitives combine
+without special cases. A value of a given type may be used wherever that
+type is accepted.</p>
+<p><strong>Axiom 5 — Zero surprises.</strong> Every construct has
+exactly one specified behaviour. The implementation MUST NOT depend on
+unspecified state, ambient configuration, or evaluation order that this
+document leaves undefined.</p>
+<h2 id="surface-language">6.3 Surface language</h2>
+<p><strong>6.3.1</strong> A minimal Dryad program is a sequence of
+statements. The following program is well-formed and prints
+<code>42</code>:</p>
+<pre class="dryad"><code>function answer() {
+    return 42;
+}
+
+print(answer());</code></pre>
+<p><strong>6.3.2</strong> The principal syntactic categories are:</p>
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 35%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr>
+<th>Category</th>
+<th>Examples</th>
+<th>Clause</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Declarations</td>
+<td><code>let</code>, <code>const</code>, <code>function</code>,
+<code>class</code>, <code>import</code>, <code>export</code></td>
+<td>10–12</td>
+</tr>
+<tr>
+<td>Statements</td>
+<td><code>if</code>, <code>while</code>, <code>for</code>,
+<code>try</code>, <code>return</code>, <code>throw</code></td>
+<td>10</td>
+</tr>
+<tr>
+<td>Expressions</td>
+<td>operators, calls, member access, <code>match</code>, arrow
+functions</td>
+<td>9</td>
+</tr>
+<tr>
+<td>Types</td>
+<td>primitives, arrays, tuples, functions, classes, native types</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Modules</td>
+<td>named, namespace, side-effect, and identifier imports</td>
+<td>12</td>
+</tr>
+<tr>
+<td>Directives</td>
+<td><code>#&lt;io&gt;</code>, <code>"use strict types"</code>,
+<code>@compile(...)</code></td>
+<td>7, 8, 13</td>
+</tr>
+</tbody>
+</table>
+<h2 id="execution-architecture">6.4 Execution architecture</h2>
+<p><strong>6.4.1</strong> A conforming implementation MUST provide at
+least one execution tier and SHOULD provide all three. The tiers
+are:</p>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 26%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Input</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Interpreter</td>
+<td>Abstract syntax tree</td>
+<td>Evaluate the tree directly.</td>
+</tr>
+<tr>
+<td>Bytecode VM</td>
+<td>Bytecode module (Clause 19)</td>
+<td>Execute verified bytecode.</td>
+</tr>
+<tr>
+<td>AOT</td>
+<td>Native object code (Clause 20)</td>
+<td>Execute ahead-of-time compiled code.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6.4.2</strong> All tiers MUST be observationally equivalent
+for every well-formed program. Tier selection is not observable except
+through the timing and the diagnostic facilities explicitly defined in
+Clause 20.</p>
+<p><strong>6.4.3</strong> The interpreter MUST collect the runtime type
+observations required by the metadata header of Clause 19.8 when the
+implementation also provides a bytecode or AOT tier. An implementation
+that provides only the interpreter is not required to emit metadata.</p>
+<p><strong>6.4.4</strong> The <code>@compile</code> decorator (Clause
+13.9) selects the execution tier for a function or block. In the absence
+of a decorator, the tier is selected by the implementation or by the
+implementation’s command-line interface.</p>
+<h2 id="native-boundary-and-self-hosting">6.5 Native boundary and
+self-hosting</h2>
+<p><strong>6.5.1</strong> A Dryad implementation consists of a native
+runtime and a standard library. The native runtime MUST expose only the
+intrinsics specified in Clause 17.3 and Annex C. The standard library
+MUST be implemented in pure Dryad and MUST obtain all host services
+through those intrinsics.</p>
+<p><strong>6.5.2</strong> An implementation MAY provide additional host
+facilities through the foreign function interface of Clause 16. Such
+facilities are not part of the standard library and do not extend the
+intrinsic set.</p>
+<p><strong>6.5.3</strong> The native runtime MUST NOT contain
+language-specific standard library logic beyond the intrinsics. In
+particular, collection types, formatting, HTTP, JSON, cryptography, and
+path handling are implemented in Dryad.</p>
+<h2 id="document-organisation">6.6 Document organisation</h2>
+<p><strong>6.6.1</strong> The normative clauses are organised by
+language layer. Clauses 7–12 define the source language: lexical
+structure, values and types, expressions, statements, declarations, and
+modules. Clause 13 defines how those constructs execute. Clause 14
+defines errors. Clause 15 defines concurrency. Clauses 16 and 17 define
+the native boundary. Clause 18 defines the library. Clauses 19 and 20
+define the compiled representations.</p>
+<p><strong>6.6.2</strong> Clause 22 contains the complete grammar. A
+production in Clause 22 is normative. Syntax shown in other clauses is
+explanatory and MUST agree with Clause 22; if it does not, Clause 22
+prevails and the discrepancy is an erratum.</p>
+<p><strong>6.6.3</strong> Annex A is the error-code registry. Annex B is
+the opcode registry. Annex C is the intrinsic registry. Annex D is the
+standard-library index. Annex E records editorial decisions against the
+conventions draft. Annex F is the informative proposals annex. Annex G
+is the bibliography.</p>
+    <footer class="spec-footer">
+      <p><strong>Dryad Language Specification, Edition 1.0 (Draft).</strong>
+      This document defines the normative behaviour of the Dryad programming
+      language. Clauses are normative unless explicitly marked otherwise.
+      Proposals and implementation guidance are confined to the informative
+      annexes.</p>
+      <p>Published by the Dryad Language Project &middot; Licensed under the MIT
+      License &middot; <a href="dryad-specification.pdf">PDF edition</a> &middot;
+      <a href="https://github.com/dryadlang/docs">Repository</a></p>
+    </footer>
+  </main>
+</div>
+</body>
+</html>
