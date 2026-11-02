@@ -116,6 +116,7 @@ From lowest to highest precedence: `||` < `&&` < `|` < `^` < `&` < equality < re
 - `>>` is an arithmetic (sign-preserving) shift.
 - Shift counts are masked with `& 63`.
 - `~` is a unary operator. There are no compound assignments for bitwise operators (no `&=`, `|=`, `^=`, `<<=`, `>>=`).
+- AOT evaluation of bitwise operators is not implemented yet: the AOT slow path returns `null` for them, as it already does for `MOD`/`SUB`/`MUL`/`DIV`. The interpreter and bytecode VM are the supported tiers.
 
 ## Decorators
 
