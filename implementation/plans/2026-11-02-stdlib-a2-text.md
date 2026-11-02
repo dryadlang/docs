@@ -415,7 +415,7 @@ function text_test_trim_only_ascii_whitespace() {
     let start = Text_TrimStart("  abc ");
     let end = Text_TrimEnd(" abc  ");
     let nbspChar = Text_FromCodePoint(160);
-    let nbsp = nbspChar[0] + "abc";
+    let nbsp = Text_Trim(nbspChar[0] + "abc");
     let ok = all[1] == null && all[0] == "abc" &&
              start[1] == null && start[0] == "abc " &&
              end[1] == null && end[0] == " abc" &&
