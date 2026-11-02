@@ -20,6 +20,9 @@ Modules are arranged in layers. A module may import only from lower layers.
 | `bytes` | `buffers` |
 | `bytes` | `core` |
 | `buffers` | `core` |
+| `text` | `core` |
+| `text` | `buffers` |
+| `text` | `bytes` |
 
 ## Enforced rule
 
@@ -27,6 +30,7 @@ Modules are arranged in layers. A module may import only from lower layers.
 
 - `bytes` may import only `core` and `buffers`.
 - `buffers` may import only `core`.
+- `text` may import only `core`, `buffers` and `bytes`.
 - The module import graph has no cycles.
 
 Modules without a rule are not checked yet.

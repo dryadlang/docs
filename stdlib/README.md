@@ -27,6 +27,7 @@ C++ runtime / OS syscalls
 ├── core/           IDisposable, IEnumerable, exception factories
 ├── buffers/        Buffer — managed byte arrays
 ├── bytes/          byte operations over Buffer
+├── text/           byte-indexed UTF-8 text and StringBuilder
 ├── collections/    List, Map, Set, Queue (barrel)
 ├── io/             VFS, streams, paths, file I/O
 ├── async/          Promise, event loop, threads (barrel)
@@ -40,6 +41,7 @@ C++ runtime / OS syscalls
 | Core | [core.md](core.md) | `@std/core/exceptions`, etc. |
 | Buffers | [buffers.md](buffers.md) | `@std/buffers/buffer` |
 | Bytes | [bytes.md](bytes.md) | `@std/bytes/bytes` |
+| Text | [text.md](text.md) | `@std/text/text` |
 | Collections | [collections.md](collections.md) | `@std/collections` |
 | I/O | [io.md](io.md) | `@std/io/file` (facade) |
 | Async | [async.md](async.md) | `@std/async` |
