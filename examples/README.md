@@ -19,7 +19,7 @@ Options:
 | `--include-net` | Run TCP client (needs echo server on `:9090`) |
 | `--include-optional` | Same as `--include-net` for optional examples |
 
-Triple coverage gate (phase 6.15): all examples must pass interpreter, `--vm`, and `compile --aot`. Track progress with `./examples/run_benchmark.sh --triple`.
+Triple coverage gate (phase 6.15) is green for every required example: interpreter, `--vm`, and `compile --aot`. From `src/`, run `../docs/examples/run_benchmark.sh --triple` (51 passed, 3 skipped for the optional TCP client).
 
 ## Catalog
 

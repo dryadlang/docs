@@ -116,7 +116,7 @@ Complete inventory of Dryad project documentation. This module repository holds 
 | [plans/BYTECODE_COVERAGE.md](implementation/plans/BYTECODE_COVERAGE.md) | Coverage matrix |
 | [plans/2026-09-17-stdlib-via-intrinsics.md](implementation/plans/2026-09-17-stdlib-via-intrinsics.md) | CALL_GLOBAL |
 | [plans/2026-09-17-native-binary-output.md](implementation/plans/2026-09-17-native-binary-output.md) | Native binary |
-| [plans/2026-09-17-example-triple-coverage.md](implementation/plans/2026-09-17-example-triple-coverage.md) | Example gate |
+| [plans/2026-09-17-example-triple-coverage.md](implementation/plans/2026-09-17-example-triple-coverage.md) | Example gate (6.15 complete, 51/54) |
 
 ### Principles
 

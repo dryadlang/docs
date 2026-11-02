@@ -1,6 +1,6 @@
 # Phase 6: Triple Execution Model
 
-> **Status:** Phase 6.10 complete — see [PHASE_6_TRIPLE_MODEL.md](../phases/PHASE_6_TRIPLE_MODEL.md)  
+> **Status:** Phase 6 complete through 6.15 — see [PHASE_6_TRIPLE_MODEL.md](../phases/PHASE_6_TRIPLE_MODEL.md)  
 > **Spec reference:** Dryad Conventions §8, §13, §14  
 > **Date:** 2026-09-16
 

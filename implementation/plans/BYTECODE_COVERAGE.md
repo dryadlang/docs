@@ -1,6 +1,6 @@
 # Bytecode Coverage Matrix
 
-> **Status:** Complete for bytecode-eligible language subset (phase 6.12)  
+> **Status:** Bytecode-eligible subset complete (6.12). Example triple gate complete (6.15).  
 > **Tests:** 403+ unit tests (see [6.13 stdlib via intrinsics](2026-09-17-stdlib-via-intrinsics.md))
 
 ## Opcode inventory (50 opcodes)
@@ -52,7 +52,8 @@
 | `import` / module loading | Program-level |
 | `await` / async | Event loop integration |
 | `super` | Constructor dispatch |
-| Function expressions / closures | No `MAKE_CLOSURE` yet |
+| Function expressions inside a named function | Interpreter, so the closure keeps its environment |
+| Script-level lambdas | `MAKE_FUNCTION`; parameters and body stay on the AST |
 | Object literals `{a:1}` | No `ObjectExpression` in parser |
 | Computed method call `obj[x]()` | Rare; deferred |
 
@@ -65,4 +66,4 @@ Bytecode coverage is **complete** for:
 3. Class instance methods in `@compile("bytecode")` functions
 4. Control flow including `break`/`continue`
 
-Stdlib integration via `CALL_GLOBAL` is complete (6.13). Next: tier-2 JIT, closures.
+Stdlib integration via `CALL_GLOBAL` is complete (6.13). The 6.15 example gate is complete. Closures inside named functions stay interpreted; script-level lambdas use `MAKE_FUNCTION`. Next: tier-2 JIT, and bytecode capture of mutable outer locals.

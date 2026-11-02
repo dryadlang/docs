@@ -59,17 +59,35 @@ When you run `script.dryad` with `@compile("AOT")`, the runtime auto-loads:
 
 `async function` bodies always execute on the **interpreter** path (event loop integration).
 
+## Closures
+
+A named function that contains a function expression runs on the interpreter, even under `--vm`. That keeps captured variables, as in `makeMultiplier` from `examples/01-language/functions.dryad`.
+
+Script-level lambdas (`function(v) { ... }` passed to `Promise.then` or `List.map`) compile to `MAKE_FUNCTION`. Compiling one does not remove its parameters or body from the source tree.
+
+## Shared semantics
+
+Interpreter and bytecode VM agree on these rules:
+
+| Expression | Result |
+|------------|--------|
+| `false && boom()` | `false`, and `boom` is not called |
+| `true \|\| boom()` | `true`, and `boom` is not called |
+| `true && 10` | `10` |
+| `10 / 3` | `3` (integer division truncates) |
+| `1 / 0`, `1 % 0` | throws `Division by zero` or `Modulo by zero` |
+
 ## Script entry quirk (VM)
 
 Scripts with only top-level statements are wrapped as `__dryad_main` for VM execution. Top-level `let` bindings are **not** visible in `global_env` after VM script entry — wrap verification logic in a named function.
 
 ## Triple coverage gate
 
-All examples must pass interpreter, `--vm`, and `compile --aot`:
+Required manifest examples pass interpreter, `--vm`, and `compile --aot` (51 of 54 cells). `net-tcp-client` is skipped unless you pass `--include-net`.
 
 ```bash
 cd src
-./examples/run_benchmark.sh --triple
+../docs/examples/run_benchmark.sh --triple
 ```
 
 ## See also

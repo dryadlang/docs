@@ -1,7 +1,6 @@
 # Phase 6 — Triple Execution Model
 
-> **Status:** 6.15 in progress (example triple coverage gate)  
-> **Tests:** 410 unit tests (+1 JIT slow test)  
+> **Status:** Phase 6 complete, including the 6.15 example triple gate  
 > **Master plan:** [2026-09-16-triple-execution-model.md](../plans/2026-09-16-triple-execution-model.md)
 
 ## Overview
@@ -146,20 +145,29 @@ Details: [2026-09-17-stdlib-via-intrinsics.md](../plans/2026-09-17-stdlib-via-in
 
 Details: [2026-09-17-native-binary-output.md](../plans/2026-09-17-native-binary-output.md)
 
-### 6.15 — Example triple coverage gate (in progress)
+### 6.15 — Example triple coverage gate ✅
 
-**Goal:** Every file in `docs/examples/manifest.json` runs in interpreter, bytecode VM, and AOT compile modes.
+**Goal:** Every required file in `docs/examples/manifest.json` runs in the interpreter, the bytecode VM, and AOT compile.
 
 ```bash
-./examples/run_benchmark.sh --triple
+cd src
+../docs/examples/run_benchmark.sh --triple
 ```
 
-**Done so far (43/48 triple cells):**
-- CFG: `IrBasicBlock` + `Br`/`BrCond` → LLVM basic blocks
-- `aot_runtime.c`: `dryad_print`, arrays (`new_array`, `push`, `get_element`)
-- VM: `__dryad_main` bytecode path + interpreter fallback (stdlib, methods, closures)
-- AOT: 13/15 examples compile; native `control_flow` runs with correct loop sum
+**Result:** 51/54 cells passed. The other 3 are `net-tcp-client`, which the benchmark skips unless `--include-net` is set (it needs an echo server on port 9090).
 
-**Remaining:** `io-vfs` / `http_parse` VM segfault; AOT `io-streams`/`io-paths` compile gaps; array indexing precision in native runtime.
+What closed the remaining VM failures:
+
+- Named functions that contain a lambda stay on the interpreter, so closures such as `makeMultiplier` keep the variables they capture. `functions.dryad` under `--vm` prints `42`, `42`, and `120`.
+- Compiling a lambda copies its parameters and borrows its body. The original function expression stays intact, so a later interpreter call still sees the real arity. That fixed `async_await.dryad` (`42`, then microtask order `0`, `1`).
+- `MAKE_FUNCTION` calls back through the runtime delegate. It does not keep a pointer to the VM that created the closure.
 
 Details: [2026-09-17-example-triple-coverage.md](../plans/2026-09-17-example-triple-coverage.md)
+
+### Semantics aligned after 6.15
+
+Interpreter and bytecode VM now agree on:
+
+- `&&` and `||` short-circuit and return the operand that decided the result (`true && 10` is `10`; `false && boom()` does not call `boom()`).
+- Integer `/` truncates (`10 / 3` is `3`) in both the interpreter and generic VM `DIV`.
+- Integer `/` or `%` by zero throws `Division by zero` or `Modulo by zero`.
