@@ -663,9 +663,11 @@ function bytes_test_trim() {
     let all = Bytes_Trim(buf);
     let start = Bytes_TrimStart(buf);
     let end = Bytes_TrimEnd(buf);
+    // TrimStart keeps the trailing whitespace: [65, 10, 32].
+    // TrimEnd keeps the leading whitespace: [32, 9, 65].
     let ok = all[1] == null && Buffer_Len(all[0]) == 1 && Buffer_Read(all[0], 0) == 65 &&
-             start[1] == null && Buffer_Len(start[0]) == 2 && Buffer_Read(start[0], 0) == 65 &&
-             end[1] == null && Buffer_Len(end[0]) == 3 && Buffer_Read(end[0], 0) == 9;
+             start[1] == null && Buffer_Len(start[0]) == 3 && Buffer_Read(start[0], 0) == 65 &&
+             end[1] == null && Buffer_Len(end[0]) == 3 && Buffer_Read(end[0], 0) == 32;
     Buffer_Dispose(buf);
     return ok;
 }
