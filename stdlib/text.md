@@ -166,11 +166,15 @@ sb.clear();                      // reset length to 0, keep capacity
 | `toString()` | `string` | Snapshot the accumulated bytes as a string |
 | `clear()` | `null` | Reset the length to `0`, keep capacity |
 | `length()` | `int` | Number of bytes accumulated |
+| `dispose()` | `null` | Release the internal buffer; reset capacity and length to `0` |
 
-**Ownership:** the builder owns its internal `Buffer` for its entire lifetime; the buffer
-is never exposed to callers and must not be disposed. Capacity starts at `initialCapacity`
-(clamped to a minimum of `1`; a non-integer argument falls back to `16`) and doubles as
-needed, with the doubling guarded against 64-bit overflow.
+**Ownership:** the builder owns its internal `Buffer`; the caller should call `dispose()`
+when finished to release it. The buffer is never exposed to callers and must not be
+disposed directly. `dispose()` is idempotent — calling it twice is safe — and after it
+returns, `append`/`appendChar`/`appendBuffer` report the disposed-buffer error, `length()`
+is `0`, and `toString()` returns `""`. Capacity starts at `initialCapacity` (clamped to a
+minimum of `1`; a non-integer argument falls back to `16`) and doubles as needed, with the
+doubling guarded against 64-bit overflow.
 
 ## TextView
 
@@ -233,6 +237,7 @@ while (i < 10) {
     i = i + 1;
 }
 let joined = sb.toString();             // "0123456789"
+sb.dispose();                           // release the internal buffer
 ```
 
 ## Limitations
