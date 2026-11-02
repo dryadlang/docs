@@ -350,7 +350,9 @@ Implement each public function with this contract:
 - Convert with `Text_ToBuffer`; if the result is a string, propagate it as the error.
 - `Text_Length`: `[__string_length(text), null]`.
 - `Text_CharAt`: bounds-check the byte index; return `[slice-as-string of one byte, null]`. A one-byte slice is produced with `Buffer_Slice(buf, index, index + 1)` then `Buffer_AsString`.
-- `Text_CodePointAt`: read the lead byte; decode 1–4 bytes; reject a continuation lead byte (`0x80..0xBF`), truncation, overlong forms, surrogates and values above `0x10FFFF`; return `[codePoint, error]`.
+- `Text_DecodeCodePoint(buf, byteIndex)` — shared helper (not public API): decode 1–4 bytes; reject a continuation lead byte (`0x80..0xBF`), truncation, overlong forms, surrogates and values above `0x10FFFF`; return `[codePoint, error]`.
+- `Text_CodePointAt`: delegate to `Text_DecodeCodePoint`.
+- `Text_CharCount` and `Text_CodePoints`: walk with `Text_DecodeCodePoint`, advancing by the encoded length; both return an error on invalid UTF-8.
 - `Text_FromCodePoint`: reject `< 0`, `> 0x10FFFF` and `0xD800..0xDFFF`; encode UTF-8 into a `Buffer_New(4)` and return it as a string.
 - `Text_Slice` / `Text_Substring`: validate byte ranges (`0 <= start <= end <= length`); slice and convert back.
 - `Text_IndexOf` / `Text_LastIndexOf`: byte-wise search with `Buffer_Read`; empty needle returns `0` / `length`; absent returns `-1`.
@@ -358,8 +360,6 @@ Implement each public function with this contract:
 - `Text_StartsWith` / `Text_EndsWith`: compare byte-wise; longer affix returns `false`; empty affix returns `true`.
 - `Text_Equals`: byte length then `Bytes_Compare`.
 - `Text_Compare`: `Bytes_Compare` on the two buffers.
-- `Text_CharCount`: count bytes that are not UTF-8 continuation bytes (`0x80..0xBF`) after validating the string; return an error on invalid UTF-8.
-- `Text_CodePoints`: walk the bytes with the same decoder as `Text_CodePointAt` and push each code point into an array; error on invalid UTF-8.
 
 Dispose every temporary `Buffer` before returning.
 
