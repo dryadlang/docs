@@ -1,6 +1,6 @@
 # Stdlib dependency graph
 
-Modules are arranged in layers. A module may import only from lower layers (or its own layer where a rule allows it).
+Modules are arranged in layers. A module may import only from lower layers.
 
 ## Layers
 
