@@ -103,8 +103,19 @@ p.x = 10;
 | Arithmetic | `+` `-` `*` `/` `%` |
 | Comparison | `==` `!=` `<` `<=` `>` `>=` |
 | Logical | `!` `&&` `\|\|` |
+| Bitwise | `&` `\|` `^` `~` `<<` `>>` |
 | Assignment | `=` `+=` `-=` `*=` `/=` |
 | Member / call | `.` `()` `[]` |
+
+### Precedence and bitwise semantics
+
+From lowest to highest precedence: `||` < `&&` < `|` < `^` < `&` < equality < relational < shifts (`<<` `>>`) < additive < multiplicative < unary (`!` `~` `-`).
+
+- Bitwise operators (`&` `|` `^` `~` `<<` `>>`) accept integer operands only.
+- `<<` wraps modulo 2^64.
+- `>>` is an arithmetic (sign-preserving) shift.
+- Shift counts are masked with `& 63`.
+- `~` is a unary operator. There are no compound assignments for bitwise operators (no `&=`, `|=`, `^=`, `<<=`, `>>=`).
 
 ## Decorators
 
