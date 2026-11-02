@@ -33,9 +33,9 @@ disposes inside each call.
   and `error` is set.
 - Methods that produce no value (`StringBuilder.append*`, `StringBuilder.clear`) return
   `null | error`.
-- A non-string argument yields `ArgumentOutOfRangeException`. A `null` buffer yields
-  `ArgumentNullException`; out-of-range byte indices, code points, counts, bases, or
-  `decimals` yield `ArgumentOutOfRangeException`.
+- A non-string argument yields `ArgumentOutOfRangeException`; a `null` argument yields
+  `ArgumentNullException`. A `null` buffer yields `ArgumentNullException`; out-of-range byte
+  indices, code points, counts, bases, or `decimals` yield `ArgumentOutOfRangeException`.
 - Invalid UTF-8 (bad leading byte, truncation, overlong form, surrogate, or values above
   `0x10FFFF`) yields `Exception`. Numeric parse failures (no digits, invalid digit,
   overflow, unexpected trailing characters) yield `ArgumentOutOfRangeException`.
@@ -134,13 +134,20 @@ or `0x` prefix. `Text_FormatInt` always emits lowercase digits; `0` yields `"0"`
 negative values get a leading `'-'`. `INT64_MIN` (`-9223372036854775808`) is representable
 in both directions.
 
-## Float formatting
+## Float parsing and formatting
+
+`Text_ParseFloat` accepts an optional sign, a decimal mantissa, and an optional `e`/`E`
+exponent. Overflow — an exponent or scaled mantissa beyond the double range, such as
+`"1e309"`, `"1e1000"`, or a large mantissa scaled up — returns a `Float overflow` error;
+underflow (e.g. `"1e-400"`) returns `0.0` rather than an error.
 
 `Text_FormatFloat(value, decimals)` requires `decimals` in `0..15`. Non-finite values
-(`NaN`, `+Inf`, `-Inf`) are rejected. Rounding is **half away from zero**: the magnitude is
-rounded at `0.5`, then the sign is reapplied, so `-0.5` formats to `-1` (with `decimals=0`)
-and `3.7` to `4`. A negative value that rounds to zero is written with a leading `'-'`
-(printf-style negative zero), e.g. `Text_FormatFloat(-0.4, 0)` is `"-0"`.
+(`NaN`, `+Inf`, `-Inf`) are rejected, and a finite value whose scaled magnitude reaches 2^63
+(roughly `|value| × 10^decimals ≥ 9.22e18`) returns a range error. Rounding is **half away
+from zero**: the magnitude is rounded at `0.5`, then the sign is reapplied, so `-0.5`
+formats to `-1` (with `decimals=0`) and `3.7` to `4`. A negative value that rounds to zero
+is written with a leading `'-'` (printf-style negative zero), e.g. `Text_FormatFloat(-0.4, 0)`
+is `"-0"`.
 
 ## StringBuilder
 
