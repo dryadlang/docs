@@ -489,7 +489,7 @@ function text_test_split() {
     let trailing = Text_Split("a,", ",");
     let missing = Text_Split("abc", ",");
     let ok = parts[1] == null && __runtime_array_length(parts[0]) == 4 &&
-             parts[0][1] == "" &&
+             parts[0][2] == "" &&
              empty[1] == null && __runtime_array_length(empty[0]) == 1 && empty[0][0] == "" &&
              trailing[1] == null && __runtime_array_length(trailing[0]) == 2 && trailing[0][1] == "" &&
              missing[1] == null && __runtime_array_length(missing[0]) == 1 && missing[0][0] == "abc";
@@ -768,14 +768,14 @@ The view never frees the buffer; the caller must keep it alive.
 ```dryad
 function text_test_text_view() {
     let buf = Buffer_FromString("aé€");
-    let view = new TextView(buf, 0, 5);
+    let view = new TextView(buf, 0, 6);
     let len = view.length();
     let first = view.codePointAt(0);
     let second = view.codePointAt(1);
     let sub = view.slice(1, 3);
     let subText = sub.toString();
     let whole = view.toString();
-    let ok = len == 5 &&
+    let ok = len == 6 &&
              first[1] == null && first[0] == 97 &&
              second[1] == null && second[0] == 233 &&
              subText == "é" &&
