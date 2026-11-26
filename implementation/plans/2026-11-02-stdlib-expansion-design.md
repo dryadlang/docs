@@ -354,7 +354,7 @@ Objectivo: fixar as interfaces que os domínios vão consumir, sem as mudar a ca
 | `IClock` | `now()`, `monotonic()` | SystemClock, FakeClock |
 | `IComparable` | `compare(other)` | números, strings, DateTime |
 | `IHashable` | `hash()` | strings, números, chaves de Map |
-| `IError`/`Result` | `[value, error]` ou `null | error` | todos os novos módulos |
+| `IError`/`Result` | `[value, error]` ou `null \| error` | todos os novos módulos |
 
 ### B2. Convenção de erro
 

@@ -1034,6 +1034,7 @@ never converted to a Number implicitly; `ToNumber` on a String, `null`, an
 Object, a Buffer, or a pointer throws a Type Error. The operation is used by the
 arithmetic and bitwise operators of 8.8.8 through 8.8.12 and by the unary
 operators of 8.8.11.
+
 | Type of `v` | `ToNumber(v)` |
 |-------------|----------------|
 | `number` | `v`, preserving `NaN` and the sign of zero. |

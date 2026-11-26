@@ -133,8 +133,8 @@ yields `Break`, `Continue`, or `Return`.
 | `Mutex` | A mutual-exclusion primitive (Clause 15.2). |
 | `any` | The union of all value types. |
 | `never` | The empty type; an expression of type `never` does not return normally. |
-| `T?` | Shorthand for `T | Null`. |
-| `T | U` | The union of `T` and `U`. |
+| `T?` | Shorthand for `T \| Null`. |
+| `T \| U` | The union of `T` and `U`. |
 
 **5.5.2** This document uses the following notation for native types, which are
 visible to the AOT compiler, the FFI, and intrinsic declarations.

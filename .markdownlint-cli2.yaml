@@ -1,0 +1,29 @@
+config:
+  default: true
+  MD013: false   # line-length — prose docs intentionally wrap long lines
+  MD033: false   # inline HTML — used for diagrams/tables in a few docs
+  MD041: false   # first line in file must be a top-level heading
+  MD024:
+    siblings_only: true   # allow repeated headings (e.g. "## Examples") across different files
+  MD025: false   # multiple top-level headings — some docs use "# Title" + later "# Appendix"
+  MD004: false   # unordered list style — mixed intentionally in places
+  MD029: false   # ordered list item prefix style
+  MD040: false   # fenced code blocks must declare a language (many are plain output/trees)
+  MD060: false   # table column/pipe spacing style — purely cosmetic, not worth repo-wide reformatting
+  MD022: false   # blanks-around-headings — pre-existing in internal planning docs, not worth reformatting retroactively
+  MD031: false   # blanks-around-fences — same
+  MD032: false   # blanks-around-lists — same
+  MD036: false   # emphasis-as-heading — same
+  MD014: false   # dollar-sign-before-command without shown output — common in install snippets
+  MD037: false   # spaces-inside-emphasis — pre-existing in historical plan docs
+  MD038: false   # spaces-inside-code-span — same
+  MD009: false   # trailing-spaces — same
+  MD012: false   # multiple-consecutive-blanks — same
+  MD034: false   # bare URLs — reference docs link raw URLs intentionally in a few places
+  MD001: false   # heading-increment — one historical doc skips a level
+  MD026: false   # trailing-punctuation-in-heading — one historical doc ends a heading with "!"
+globs:
+  - "**/*.md"
+ignores:
+  - "node_modules/**"
+  - "website/**"
