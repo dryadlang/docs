@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  markdownlint:
+    name: Markdown lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint markdown
+        uses: DavidAnson/markdownlint-cli2-action@v19
+        with:
+          globs: |
+            **/*.md
+            !**/node_modules/**
+            !website/**
+
+  link-check:
+    name: Internal link check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check links (no network calls to external hosts)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >
+            --no-progress
+            --offline
+            --exclude-path website
+            --exclude-path specification/1.0/assets
+            '**/*.md'
+          fail: true
+
+  examples-manifest:
+    name: Validate examples manifest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate examples/manifest.json against disk
+        run: python3 scripts/validate_examples_manifest.py
+
+  submodule-url-check:
+    name: Submodules must use SSH URLs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail on non-SSH submodule URLs
+        run: |
+          if [ ! -f .gitmodules ]; then
+            echo "no .gitmodules, nothing to check"
+            exit 0
+          fi
+          if grep -qE '^\s*url\s*=\s*https?://' .gitmodules; then
+            echo "FAIL: .gitmodules contains an http(s) submodule URL; use git@github.com:... instead" >&2
+            grep -nE '^\s*url\s*=' .gitmodules >&2
+            exit 1
+          fi
+          echo "OK: all submodule URLs use SSH"

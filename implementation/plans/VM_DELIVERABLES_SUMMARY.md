@@ -141,6 +141,7 @@ tests/unit/vm_control_flow_test.cpp          (150 lines)
 ## Performance Metrics
 
 ### Expected Performance Improvements
+
 | Metric | Interpreter | VM (Switch) | VM (Computed Goto) |
 |--------|-------------|-------------|-------------------|
 | Opcode dispatch | 300-500 ns | 100-150 ns | 50-80 ns |

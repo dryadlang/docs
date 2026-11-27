@@ -130,9 +130,9 @@ grammar of 9.1.5 is normative.
 | 11 | `==`, `!=` | left | 9.10 |
 | 12 | `&` | left | 9.11 |
 | 13 | `^` | left | 9.11 |
-| 14 | `|` | left | 9.11 |
+| 14 | `\|` | left | 9.11 |
 | 15 | `&&` | left | 9.12 |
-| 16 | `||` | left | 9.12 |
+| 16 | `\|\|` | left | 9.12 |
 | 17 | assignment operators | right | 9.14 |
 | 18 | `=>` arrow | right | 9.19 |
 | 19 | `,` sequence | not an operator | 9.15 |
@@ -1196,7 +1196,7 @@ operation.
 | `>>>=` | `>>>` | 9.10.5 |
 | `&=` | `&` | 9.11.4 |
 | `^=` | `^` | 9.11.6 |
-| `|=` | `|` | 9.11.5 |
+| `\|=` | `\|` | 9.11.5 |
 
 **9.14.6** The order is: target Reference; for a compound, the old value; the
 right-hand side; the operation; the write. The target Reference is evaluated
@@ -1555,7 +1555,7 @@ throw, and any operation specified by Clause 15 or Clause 17 as observable.
 |-----------|------------------|
 | `a op b` | `a`, then `b`, then the operation |
 | `a && b` | `a`; `b` only if `a` is truthy |
-| `a || b` | `a`; `b` only if `a` is falsy |
+| `a \|\| b` | `a`; `b` only if `a` is falsy |
 | `a.b` | `a`, then the property lookup (which may invoke a getter) |
 | `a[i]` | `a`, then `i`, then the property lookup |
 | `a::b` | resolution of the namespace, then the export lookup |

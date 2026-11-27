@@ -74,7 +74,7 @@ These are binding. Apply them consistently; do not re-open them.
 | D-04 | Console output is the built-in `print(...)`. `console.log` is not part of Dryad. |
 | D-05 | Semicolons are required statement terminators. There is no automatic semicolon insertion. |
 | D-06 | `null` is the only nullish value. `undefined` does not exist. |
-| D-07 | `&&` and `||` short-circuit and return one of their operands (Clause 9.12). |
+| D-07 | `&&` and `\|\|` short-circuit and return one of their operands (Clause 9.12). |
 | D-08 | Equality (`==`, `!=`) never coerces. Numbers compare by IEEE 754 value (`NaN != NaN`), strings by code-point sequence, booleans by value, `null` equals only `null`, objects and arrays by identity. |
 | D-09 | Error handling is split: recoverable environment failures return `Result<T, E>`; programmer errors throw a `DryadError`. Both are specified in Clauses 8 and 14. |
 | D-10 | The specification defines the target language, not the current implementation. Implementation gaps are recorded in Clause 24 and Annex E, never as normative relaxations. |
