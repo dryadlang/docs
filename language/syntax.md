@@ -149,7 +149,7 @@ Used internally by the standard library. Application code should use `@std/*` in
 
 ```dryad
 async function main() {
-    let x = await Promise_resolve(42);
+    let x = await Promise_Resolve(42);
     return x;
 }
 ```

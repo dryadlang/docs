@@ -1,11 +1,11 @@
 // HTTP parsing (no network): URL, response, client factory.
 // Run: dryad examples/06-net/http_parse.dryad
 
-import { HttpClient_create } from "@std/net/http/http_client";
-import { Http_parseUrl } from "@std/net/http/http_url";
-import { HttpResponse_parse } from "@std/net/http/http_response";
+import { HttpClient_Create } from "@std/net/http/http_client";
+import { Http_ParseUrl } from "@std/net/http/http_url";
+import { HttpResponse_Parse } from "@std/net/http/http_response";
 
-let parsed = Http_parseUrl("http://example.com:8080/api");
+let parsed = Http_ParseUrl("http://example.com:8080/api");
 print("scheme");
 print(__runtime_object_get(parsed, "scheme"));
 print("host");
@@ -14,12 +14,12 @@ print("port");
 print(__runtime_object_get(parsed, "port"));
 
 let raw = "HTTP/1.1 200 OK\r\nContent-Length: 2\r\n\r\nOK";
-let response = HttpResponse_parse(raw);
+let response = HttpResponse_Parse(raw);
 print("status");
 print(response.statusCode);
 print("body");
 print(response.body);
 
-let client = HttpClient_create();
+let client = HttpClient_Create();
 print("client ok");
 print(client != null);

@@ -18,7 +18,8 @@ import {
     Text_Split, Text_Join, Text_Replace, Text_ReplaceAll,
     Text_ParseInt, Text_FormatInt, Text_ParseFloat, Text_FormatFloat,
     StringBuilder, TextView
-} from "@std/text/text";
+} from "@std/text";
+import { Buffer_FromString, Buffer_Dispose } from "@std/buffers";
 ```
 
 Strings are converted to a `Buffer` (from `@std/buffers/buffer`) once per operation and

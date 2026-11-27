@@ -6,7 +6,7 @@ Dryad uses ES6-style modules: named imports, explicit exports, and scoped packag
 
 ```dryad
 import { List, Map } from "@std/collections";
-import { readFile } from "@std/io/file";
+import { Fs_ReadFile } from "@std/io/file";
 import { Vec2 } from "@test/geom";
 ```
 

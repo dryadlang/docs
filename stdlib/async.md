@@ -10,34 +10,66 @@ Async runtime for Dryad: microtask-driven Promises, `async`/`await`, threading b
 | `async function` / `await` syntax | ✅ |
 | `EventLoop` pump at end of script | ✅ |
 | epoll I/O poller (`__runtime_io_*`) | ✅ Linux |
-| `Thread_startAsync` / `ThreadPool.submitAsync` | ✅ |
-| `Promise_await` / `__runtime_await_promise` | ✅ |
+| `Thread_StartAsync` / `ThreadPool.submitAsync` | ✅ |
+| `Promise_Await` / `__runtime_await_promise` | ✅ |
 
 ## Quick start
 
 ```dryad
-import { Promise_resolve, Promise_await } from "@std/async/promise";
-import { Thread_startAsync } from "@std/async/threading/threading";
+import { Promise_Resolve, Promise_Await } from "@std/async/promise";
+import { Thread_StartAsync } from "@std/async/threading/threading";
 
 async function main() {
-    let x = await Promise_resolve(40);
-    let y = await Thread_startAsync(function() { return 2; }, []);
+    let x = await Promise_Resolve(40);
+    let y = await Thread_StartAsync(function() { return 2; }, []);
     return x + y;
 }
 
 let result = main();
-Promise_await(result); // or rely on CLI pump at script end
+Promise_Await(result); // or rely on CLI pump at script end
 ```
 
 ## Modules
 
 | Module | Key API |
 |--------|---------|
-| `promise` | `Promise`, `Promise_flush`, `Promise_await`, `Promise_all` |
-| `event_loop` | `EventLoop_schedule`, `EventLoop_pump` |
-| `threading/thread` | `Thread`, `Thread_startAsync`, `Thread_parallel` |
+| `promise` | `Promise`, `Promise_Flush`, `Promise_Await`, `Promise_All` |
+| `event_loop` | `EventLoop_Schedule`, `EventLoop_Pump` |
+| `threading/thread` | `Thread`, `Thread_StartAsync`, `Thread_Parallel` |
 | `threading/thread_pool` | `ThreadPool`, `submitAsync`, `run` |
 | `async` | Barrel re-export |
+
+## API reference
+
+Every name below is exported by the `@std/async` barrel. The threading names
+are documented in [@std/async/threading](async-threading.md).
+
+### Promises (`@std/async/promise`)
+
+`new Promise(function(resolve, reject) { ... })` runs the executor at once.
+Methods: `then(onFulfilled, onRejected = null)`, `catch(onRejected)`,
+`finally(onFinally)`. In statement position `catch` and `finally` are
+keywords; `catchError` and `finallyDo` are the same methods under names that
+parse anywhere.
+
+| Function | Returns |
+|----------|---------|
+| `Promise_Resolve(value)` | A promise fulfilled with `value`. When `value` is a promise, a new promise that settles like it |
+| `Promise_Reject(error)` | A rejected promise |
+| `Promise_All(promises)` | Fulfills with the array of values in order; rejects with the first rejection |
+| `Promise_Race(promises)` | Settles like the first promise to settle; rejects with `"Promise.race: no promises"` for an empty array |
+| `Promise_Wrap(promise)` | A new promise that settles like `promise`, whether it is already settled or still pending |
+| `Promise_Await(promise)` | Blocks, pumping the event loop, until `promise` settles; returns its value. Same as `await` |
+| `Promise_Flush()` | Runs queued callbacks until the event loop is idle |
+
+### Event loop (`@std/async/event_loop`)
+
+| Function | Returns |
+|----------|---------|
+| `EventLoop_Schedule(callback)` | `null`. Queues `callback()` as a microtask |
+| `EventLoop_RunTurn()` | `1` if it ran a task, `0` when there was nothing to run. Runs one task |
+| `EventLoop_Pump()` | Runs tasks until the loop is idle |
+| `EventLoop_PendingCount()` | Number of queued tasks |
 
 ## C++ intrinsics
 

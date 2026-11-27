@@ -1,16 +1,16 @@
 // Stream I/O examples: FileStream, MemoryStream, and Path utilities
 
 import {
-    File_open,
-    File_writeAllText,
-    File_readAllText,
-    File_delete,
+    File_Open,
+    File_WriteAllText,
+    File_ReadAllText,
+    File_Delete,
     FileMode
 } from "@std/io/file";
 
 import {
-    MemoryStream_fromString,
-    MemoryStream_toString
+    MemoryStream_FromString,
+    MemoryStream_ToString
 } from "@std/io/memory_stream";
 
 import { Path } from "@std/io/path";
@@ -24,18 +24,18 @@ import {
 } from "@std/buffers/buffer";
 
 // MemoryStream roundtrip
-let mem = MemoryStream_fromString("in-memory payload");
-let memText = MemoryStream_toString(mem);
+let mem = MemoryStream_FromString("in-memory payload");
+let memText = MemoryStream_ToString(mem);
 mem.close();
 print("MemoryStream: " + memText);
 
 // FileStream buffer copy
 let nestedPath = Path.join("dryad_examples", "stream_copy.txt");
-File_writeAllText(nestedPath, "FileStream copy demo");
+File_WriteAllText(nestedPath, "FileStream copy demo");
 
-let src = File_open(nestedPath, FileMode.Read);
+let src = File_Open(nestedPath, FileMode.Read);
 let dstPath = Path.join("dryad_examples", "stream_copy_out.txt");
-let dst = File_open(dstPath, FileMode.Write);
+let dst = File_Open(dstPath, FileMode.Write);
 
 let buf = Buffer_New(256);
 let n = src.read(buf, 0, 256);
@@ -45,8 +45,8 @@ Buffer_Dispose(buf);
 src.close();
 dst.close();
 
-let copied = File_readAllText(dstPath);
+let copied = File_ReadAllText(dstPath);
 print("Copied: " + copied);
 
-File_delete(nestedPath);
-File_delete(dstPath);
+File_Delete(nestedPath);
+File_Delete(dstPath);

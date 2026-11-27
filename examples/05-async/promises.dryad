@@ -2,39 +2,39 @@
 // Run: dryad examples/05-async/promises.dryad
 
 import {
-    Promise_resolve,
-    Promise_reject,
-    Promise_all,
-    Promise_race,
-    Promise_flush
+    Promise_Resolve,
+    Promise_Reject,
+    Promise_All,
+    Promise_Race,
+    Promise_Flush
 } from "@std/async/promise";
 
-let p1 = Promise_resolve(42);
-Promise_flush();
+let p1 = Promise_Resolve(42);
+Promise_Flush();
 print("resolve");
 print(p1._value);
 
 let chained = p1.then(function(v) {
     return v + 1;
 });
-Promise_flush();
+Promise_Flush();
 print("then");
 print(chained._value);
 
-let all = Promise_all([Promise_resolve(10), Promise_resolve(20)]);
-Promise_flush();
+let all = Promise_All([Promise_Resolve(10), Promise_Resolve(20)]);
+Promise_Flush();
 print("all");
 print(all._value[0]);
 print(all._value[1]);
 
-let race = Promise_race([Promise_resolve("first"), Promise_resolve("second")]);
-Promise_flush();
+let race = Promise_Race([Promise_Resolve("first"), Promise_Resolve("second")]);
+Promise_Flush();
 print("race");
 print(race._value);
 
-let recovered = Promise_reject("err").catch(function(e) {
+let recovered = Promise_Reject("err").catch(function(e) {
     return "ok";
 });
-Promise_flush();
+Promise_Flush();
 print("catch");
 print(recovered._value);

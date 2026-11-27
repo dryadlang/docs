@@ -59,7 +59,7 @@ Users must be able to:
 ### 3.1 Import syntax (implemented)
 
 ```dryad
-import { readFile, writeFile } from "@std/io/file";
+import { Fs_ReadFile, Fs_WriteFile } from "@std/io/file";
 ```
 
 - Parser: `parse_import_declaration()` — named imports only, string literal path.
@@ -271,7 +271,7 @@ Loader behavior:
 
 ```cpp
 // Pseudocode
-if (exists(path + ".dyl") && is_fresh(path + ".dyl", path + ".dyd"))
+if (Fs_Exists(path + ".dyl") && is_fresh(path + ".dyl", path + ".dyd"))
     return LibraryLoader::load_dyl(path + ".dyl");
 else
     return ModuleLoader::load_source(path + ".dyd");

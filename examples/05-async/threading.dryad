@@ -3,9 +3,9 @@
 
 import {
     Thread,
-    Thread_parallel,
+    Thread_Parallel,
     ThreadPool,
-    ThreadPool_map
+    ThreadPool_Map
 } from "@std/async/threading/threading";
 
 function worker_add(a, b) {
@@ -22,7 +22,7 @@ let outcome = thread.join();
 print("thread join");
 print(__runtime_object_get(outcome, "value"));
 
-let parallel = Thread_parallel([worker_identity, worker_identity]);
+let parallel = Thread_Parallel([worker_identity, worker_identity]);
 print("parallel");
 print(__runtime_object_get(parallel, "value")[0]);
 
@@ -31,7 +31,7 @@ let value = pool.run(worker_add, [10, 32]);
 print("pool run");
 print(value);
 
-let mapped = ThreadPool_map(pool, [worker_identity, worker_identity]);
+let mapped = ThreadPool_Map(pool, [worker_identity, worker_identity]);
 pool.destroy();
 print("pool map");
 print(mapped[0]);

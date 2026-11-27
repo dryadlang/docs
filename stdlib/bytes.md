@@ -10,7 +10,8 @@ Byte operations over `Buffer` — copy, fill, compare, search, concat, trim, and
 import {
     Bytes_Copy, Bytes_Fill, Bytes_Compare, Bytes_Equals,
     Bytes_IndexOf, Bytes_Concat, Bytes_Trim, Bytes_ToHex, Bytes_FromHex
-} from "@std/bytes/bytes";
+} from "@std/bytes";
+import { Buffer_New, Buffer_FromString, Buffer_AsString, Buffer_Dispose } from "@std/buffers";
 ```
 
 `Buffer` (from `@std/buffers/buffer`) is the only byte container. Offsets and counts are in bytes; byte values are integers `0..255`.
