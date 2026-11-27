@@ -66,7 +66,7 @@ if (err != null) {
 
 `Fs_Exists` is a boolean. A disposed VFS or a null path yields `false`, not an error string, so `if (Fs_Exists(path))` cannot treat a failure as "the file is there".
 
-`Stream_IsError(value)` is true when `value` is not a stream (no `read` / `close`). Use it on the result of `File_Open`.
+`Stream_IsError(value)` is true when `value` is not a stream instance. Use it on the result of `File_Open`. It is safe on any value, including the error string itself.
 
 ## Paths
 
@@ -149,6 +149,119 @@ let vfs = ThreadSafeVFS(MemoryBackend());
 ThreadSafeVFS_WriteFile(vfs, "/a.txt", "one");
 let text = ThreadSafeVFS_ReadFile(vfs, "/a.txt");
 ```
+
+## API reference
+
+Every name below is exported by the `@std/io` barrel. "Error" means an error
+message string (see [Error model](#error-model)); nothing here throws.
+
+### Files through the global VFS (`@std/io/file`)
+
+These go through one process-wide VFS, a `NativeBackend` until
+`Fs_SetBackend` replaces it.
+
+| Function | Returns |
+|----------|---------|
+| `Fs_ReadFile(path)` | File text, or an error |
+| `Fs_WriteFile(path, content)` | `null`, or an error. Replaces the file |
+| `Fs_Exists(path)` | `true` / `false`. Never an error |
+| `Fs_RemoveFile(path)` | `null`, or an error |
+| `Fs_ListDirectory(path)` | Array of entries (shape depends on the backend, see [VFS](#vfs)), or an error |
+| `Fs_Mkdir(path)` | `null`, or an error |
+| `Fs_SetBackend(backend)` | `null`. Disposes the previous global VFS |
+| `Fs_ReadFileAsync(path)`, `Fs_WriteFileAsync(path, content)`, `Fs_ExistsAsync(path)`, `Fs_RemoveFileAsync(path)`, `Fs_ListDirectoryAsync(path)`, `Fs_MkdirAsync(path)` | A `Promise` already resolved with the synchronous result. Errors resolve too; they do not reject |
+
+### VFS instances (`@std/io/vfs`)
+
+| Function | Returns |
+|----------|---------|
+| `VFS(backend)` | A VFS object over `MemoryBackend()` or `NativeBackend()` |
+| `VFS_ReadFile(vfs, path)` | File text, or an error |
+| `VFS_WriteFile(vfs, path, content)` | `null`, or an error |
+| `VFS_ListDirectory(vfs, path)` | Array of entries, or an error. An empty path lists `/` |
+| `VFS_RemoveFile(vfs, path)` | `null`, or an error |
+| `VFS_Exists(vfs, path)` | `true` / `false`. `false` after dispose |
+| `VFS_Mkdir(vfs, path)` | `null`, or an error |
+| `VFS_Dispose(vfs)` | `null`. Later calls return `ObjectDisposedException` |
+| `MemoryBackend()` | In-memory backend: one map of normalized full paths |
+| `NativeBackend()` | Backend over the runtime filesystem intrinsics |
+| `FileSystemBackend()` | A description string only. Backends are not pluggable: the VFS dispatches on `backend.type` (`"memory"` or `"native"`) |
+
+### Paths (`@std/io/path`)
+
+| Function | Returns |
+|----------|---------|
+| `Path_Join(a, b)` | Normalized `a/b`; `b` wins when absolute. Error for an empty `a` or a `0` byte |
+| `Path_Dirname(path)` | Parent directory: `"/"` for `/file`, `"."` when there is no `/` |
+| `Path_Basename(path)` | Last segment (`/srv/app/` gives `app`) |
+| `Path_Extension(path)` | Last `.suffix` of the basename including the dot; `""` for none or dotfiles (`.bashrc`) |
+| `Path_EnsureDirectory(path)` | `null` once the directory and its parents exist on disk, or an error |
+| `Path_EnsureParentForFile(path)` | `Path_EnsureDirectory(Path_Dirname(path))` |
+| `Path` | Object with `join`, `dirname`, `basename`, `extension` and `ensureDirectory` members |
+
+`Path_EnsureDirectory` and `Path_EnsureParentForFile` always use the real
+filesystem, whatever the global VFS backend is.
+
+### Path validation and error factories (`@std/io/io_errors`)
+
+| Function | Returns |
+|----------|---------|
+| `ValidatePath(path)` | `null` when usable; an error for null, empty, or containing a `0` byte |
+| `NormalizePath(path)` | `/` separators, `.` and `..` applied, repeated `/` collapsed. Returns the input unchanged when it cannot be normalized |
+| `InvalidPathError(path)` | `"Invalid path: <path>"` |
+| `FileNotFoundError(path)` | `"File not found: <path>"` |
+| `DirectoryNotFoundError(path)` | `"Directory not found: <path>"` |
+| `AccessDeniedError(path)` | `"Access denied: <path>"` |
+| `FileAlreadyExistsError(path)` | `"File already exists: <path>"` |
+| `InvalidOperationError(operation, reason)` | `"<operation> failed: <reason>"` |
+
+### File handles (`@std/io/filehandle`)
+
+| Function | Returns |
+|----------|---------|
+| `FileHandle(path, mode)` | A handle over the global VFS. `mode` is `"read"`, `"write"` or `"append"` |
+| `FileHandle_Read(handle)` | File text, or an error (closed, or not a read handle) |
+| `FileHandle_Write(handle, content)` | `null`, or an error. See [FileHandle](#filehandle) for how writes accumulate |
+| `FileHandle_Close(handle)`, `FileHandle_Dispose(handle)` | `null`. Idempotent |
+| `FileHandle_IsOpen(handle)` | `true` until closed; `false` for `null` |
+| `FileHandle_GetPath(handle)`, `FileHandle_GetMode(handle)` | The path or mode given to `FileHandle`; `null` for a `null` handle |
+
+### Streams (`@std/io/stream`, `@std/io/filestream`, `@std/io/memory_stream`)
+
+All streams share one shape: `canRead`, `canWrite`, `canSeek`, `length` and
+`position` properties, and `read(buffer, offset, count)`,
+`write(buffer, offset, count)`, `seek(offset, origin)`, `flush()` and
+`close()`. `read` and `write` return a byte count or an error.
+
+| Name | Description |
+|------|-------------|
+| `SeekOrigin_Begin`, `SeekOrigin_Current`, `SeekOrigin_End` | `0`, `1`, `2` (POSIX `whence`). Also `SeekOrigin.Begin` etc. |
+| `Stream_IsStream(value)` | `true` for a stream instance. Safe on anything, including error strings |
+| `Stream_IsError(value)` | `!Stream_IsStream(value)`: use it on what `File_Open` returned |
+| `FileMode_Read`, `FileMode_Write`, `FileMode_ReadWrite`, `FileMode_Append` | `0`–`3`. Also `FileMode.Read` etc. See [FileStream](#filestream) |
+| `File_Open(path, mode)` | A `FileStream`, or an error. Write modes create missing parent directories. `mode` defaults to `FileMode_Read` |
+| `File_ReadAllText(path)` | The whole file as text, or an error. Reads until it has the full length |
+| `File_WriteAllText(path, content)` | `null`, or an error (including a short write). Creates parent directories |
+| `File_Exists(path)` | `true` / `false` on the real filesystem; `false` for invalid paths |
+| `File_Delete(path)` | `null`, or an error when the file is missing or cannot be removed |
+| `MemoryStream_New(capacity)` | Writable, growable stream over a new buffer |
+| `MemoryStream_FromString(text)` | Read-only stream over the UTF-8 bytes of `text` |
+| `MemoryStream_FromBuffer(buffer, writable)` | Stream over an existing `Buffer`, which it does not own. `writable` defaults to `false` |
+| `MemoryStream_ToString(stream)` | The stream's contents as text, or `ObjectDisposedException` after `close` |
+| `MemoryStream_GetBuffer(stream)` | The underlying `Buffer` (not a copy), or an error after `close` |
+
+`File_*` here works on the real filesystem through file descriptors. `Fs_*`
+goes through the global VFS. Pick one per file.
+
+### Locking (`@std/io/io_concurrency`)
+
+| Function | Returns |
+|----------|---------|
+| `FileLock()` | An unlocked lock |
+| `FileLock_Acquire(lock)` | `null`, or `"FileLock already held"`. Never waits |
+| `FileLock_Release(lock)` | `null` |
+| `ThreadSafeVFS(backend)` | A VFS with a `FileLock` |
+| `ThreadSafeVFS_ReadFile`, `ThreadSafeVFS_WriteFile`, `ThreadSafeVFS_Exists`, `ThreadSafeVFS_RemoveFile`, `ThreadSafeVFS_ListDirectory`, `ThreadSafeVFS_Mkdir` | Same as the `VFS_*` function of that name, run while holding the lock. An error if the lock is already held |
 
 ## What stays in C++
 

@@ -34,6 +34,20 @@ let error = __runtime_object_get(outcome, "error");
 4. `pool.run(fn, args)` — shorthand for submit + wait
 5. `pool.destroy()` — shutdown workers
 
+## API reference
+
+Exported by `@std/async/threading` and by the `@std/async` barrel.
+
+| Name | Description |
+|------|-------------|
+| `new Thread(fn, args = [])` | A thread that has not started. `start()` spawns it, `join()` blocks and returns `{ ok, value, error }`, `isStarted()` |
+| `Thread_StartAsync(fn, args = [])` | Runs `fn(...args)` on a new thread and returns a `Promise` of its result, settled on the main event loop |
+| `Thread_Parallel(fns)` | Runs every function on its own thread and joins them all. Returns `{ ok, value, error }` with `value` the array of results |
+| `Thread_SleepMs(milliseconds)` | Sleeps the calling thread |
+| `Thread_HardwareConcurrency()` | Number of hardware threads (at least `1`) |
+| `new ThreadPool(workerCount = 2)` | Pool of worker threads. `submit(fn, args)` returns a job id, `wait(jobId)` blocks and returns the job's value, `run(fn, args)` is submit + wait, `submitAsync(fn, args)` returns a `Promise`, `destroy()` stops the workers |
+| `ThreadPool_Map(pool, fns)` | Submits every function (no arguments) and returns the array of their values in order |
+
 ## Implementation notes
 
 - Workers call `pthread`-backed `std::thread` via C++ `ThreadManager`
@@ -43,7 +57,7 @@ let error = __runtime_object_get(outcome, "error");
 
 ## Limitations
 
-- Blocking join/wait model only (no futures/promises integration yet)
+- `join` and `wait` block. For non-blocking use, `Thread_StartAsync` and `ThreadPool.submitAsync` return promises
 - No thread cancellation or timeout
 - GC/thread safety across interpreters not fully validated
 - Functions passed to threads must not depend on caller's mutable closure state

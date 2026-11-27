@@ -45,6 +45,8 @@ Buffer_Dispose(slice);
 | `Buffer_FromString(str)` | UTF-8 encode string |
 | `Buffer_AsString(buf)` | UTF-8 decode to string |
 | `Buffer_Dispose(buf)` | Free memory |
+| `Buffer_GetOffset(buf)` | Byte offset of `buf` in its root allocation (`0` for a root buffer, summed through nested slices) |
+| `Buffer_GetActualHandle(buf)` | Native handle of the root allocation, shared by every slice. For code that passes buffers to intrinsics, together with `Buffer_GetOffset` |
 
 ## Used by
 
