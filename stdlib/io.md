@@ -166,10 +166,11 @@ These go through one process-wide VFS, a `NativeBackend` until
 | `Fs_WriteFile(path, content)` | `null`, or an error. Replaces the file |
 | `Fs_Exists(path)` | `true` / `false`. Never an error |
 | `Fs_RemoveFile(path)` | `null`, or an error |
+| `Fs_RenameFile(oldPath, newPath)` | `null`, or an error (e.g. `FileNotFoundException` if `oldPath` doesn't exist) |
 | `Fs_ListDirectory(path)` | Array of entries (shape depends on the backend, see [VFS](#vfs)), or an error |
 | `Fs_Mkdir(path)` | `null`, or an error |
 | `Fs_SetBackend(backend)` | `null`. Disposes the previous global VFS |
-| `Fs_ReadFileAsync(path)`, `Fs_WriteFileAsync(path, content)`, `Fs_ExistsAsync(path)`, `Fs_RemoveFileAsync(path)`, `Fs_ListDirectoryAsync(path)`, `Fs_MkdirAsync(path)` | A `Promise` already resolved with the synchronous result. Errors resolve too; they do not reject |
+| `Fs_ReadFileAsync(path)`, `Fs_WriteFileAsync(path, content)`, `Fs_ExistsAsync(path)`, `Fs_RemoveFileAsync(path)`, `Fs_RenameFileAsync(oldPath, newPath)`, `Fs_ListDirectoryAsync(path)`, `Fs_MkdirAsync(path)` | A `Promise` already resolved with the synchronous result. Errors resolve too; they do not reject |
 
 ### VFS instances (`@std/io/vfs`)
 
@@ -180,6 +181,7 @@ These go through one process-wide VFS, a `NativeBackend` until
 | `VFS_WriteFile(vfs, path, content)` | `null`, or an error |
 | `VFS_ListDirectory(vfs, path)` | Array of entries, or an error. An empty path lists `/` |
 | `VFS_RemoveFile(vfs, path)` | `null`, or an error |
+| `VFS_RenameFile(vfs, oldPath, newPath)` | `null`, or an error (e.g. `FileNotFoundException` if `oldPath` doesn't exist) |
 | `VFS_Exists(vfs, path)` | `true` / `false`. `false` after dispose |
 | `VFS_Mkdir(vfs, path)` | `null`, or an error |
 | `VFS_Dispose(vfs)` | `null`. Later calls return `ObjectDisposedException` |
@@ -261,7 +263,7 @@ goes through the global VFS. Pick one per file.
 | `FileLock_Acquire(lock)` | `null`, or `"FileLock already held"`. Never waits |
 | `FileLock_Release(lock)` | `null` |
 | `ThreadSafeVFS(backend)` | A VFS with a `FileLock` |
-| `ThreadSafeVFS_ReadFile`, `ThreadSafeVFS_WriteFile`, `ThreadSafeVFS_Exists`, `ThreadSafeVFS_RemoveFile`, `ThreadSafeVFS_ListDirectory`, `ThreadSafeVFS_Mkdir` | Same as the `VFS_*` function of that name, run while holding the lock. An error if the lock is already held |
+| `ThreadSafeVFS_ReadFile`, `ThreadSafeVFS_WriteFile`, `ThreadSafeVFS_Exists`, `ThreadSafeVFS_RemoveFile`, `ThreadSafeVFS_RenameFile`, `ThreadSafeVFS_ListDirectory`, `ThreadSafeVFS_Mkdir` | Same as the `VFS_*` function of that name, run while holding the lock. An error if the lock is already held |
 
 ## What stays in C++
 
