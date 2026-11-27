@@ -129,4 +129,4 @@ Catalog: [examples/README.md](./examples/README.md)
 - Diagrams → `diagrams/dryad-language/parts/`
 - Update [SITEMAP.md](SITEMAP.md) when adding new files
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for the development workflow.
+See [CONTRIBUTING.md](https://github.com/dryadlang/source/blob/main/CONTRIBUTING.md) for the development workflow.
