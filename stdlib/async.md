@@ -50,7 +50,9 @@ are documented in [@std/async/threading](async-threading.md).
 Methods: `then(onFulfilled, onRejected = null)`, `catch(onRejected)`,
 `finally(onFinally)`. In statement position `catch` and `finally` are
 keywords; `catchError` and `finallyDo` are the same methods under names that
-parse anywhere.
+parse anywhere. `finally(onFinally)` calls `onFinally()` once the promise
+settles and returns a promise that keeps the original outcome: the same value,
+or a rejection with the same error.
 
 | Function | Returns |
 |----------|---------|
