@@ -30,3 +30,12 @@ print(!flag);
 print("compare");
 print(a > b);
 print(a == 10);
+
+print("negate");
+print(-a);
+print(-a + b);
+
+// Integers are 64-bit and wrap on overflow.
+let max = 9223372036854775807;
+print("wrap");
+print(max + 1);
