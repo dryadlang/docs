@@ -111,6 +111,10 @@ p.x = 10;
 
 Integer `/` truncates toward zero (`10 / 3` is `3`). Integer `/` or `%` with a zero divisor throws. Float division is unchanged.
 
+Integers are 64-bit two's complement. `+`, `-`, `*` and unary `-` wrap on overflow: `9223372036854775807 + 1` is `-9223372036854775808`. `INT64_MIN / -1` is `INT64_MIN` and `INT64_MIN % -1` is `0`; neither traps. `%` takes the sign of the dividend (`-7 % 2` is `-1`). An integer literal larger than `9223372036854775807` is a parse error (`Integer literal out of range`). Write the minimum as `-9223372036854775807 - 1`.
+
+Unary `-` accepts integers and floats (`-0.0` stays negative zero); anything else throws `Unary minus requires numeric operand`.
+
 ### Precedence and bitwise semantics
 
 From lowest to highest precedence: `||` < `&&` < `|` < `^` < `&` < equality < relational < shifts (`<<` `>>`) < additive < multiplicative < unary (`!` `~` `-`).

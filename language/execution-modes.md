@@ -84,6 +84,9 @@ Interpreter and bytecode VM agree on these rules:
 | `true && 10` | `10` |
 | `10 / 3` | `3` (integer division truncates) |
 | `1 / 0`, `1 % 0` | throws `Division by zero` or `Modulo by zero` |
+| `9223372036854775807 + 1` | `-9223372036854775808` (64-bit integers wrap) |
+| `(-9223372036854775807 - 1) / -1` | `-9223372036854775808` (no trap); `% -1` is `0` |
+| `-x` | negation; `-0.0` stays negative zero; non-numbers throw `Unary minus requires numeric operand` |
 
 ## Script entry quirk (VM)
 
