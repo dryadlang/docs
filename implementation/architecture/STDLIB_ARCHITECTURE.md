@@ -546,7 +546,7 @@ class File {
         return new FileStream(fd, mode);
     }
     
-    static exists(path: string): boolean {
+    static Fs_Exists(path: string): boolean {
         return __sys_access(path, 0) == 0;
     }
     

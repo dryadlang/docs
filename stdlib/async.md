@@ -10,32 +10,32 @@ Async runtime for Dryad: microtask-driven Promises, `async`/`await`, threading b
 | `async function` / `await` syntax | ✅ |
 | `EventLoop` pump at end of script | ✅ |
 | epoll I/O poller (`__runtime_io_*`) | ✅ Linux |
-| `Thread_startAsync` / `ThreadPool.submitAsync` | ✅ |
-| `Promise_await` / `__runtime_await_promise` | ✅ |
+| `Thread_StartAsync` / `ThreadPool.submitAsync` | ✅ |
+| `Promise_Await` / `__runtime_await_promise` | ✅ |
 
 ## Quick start
 
 ```dryad
-import { Promise_resolve, Promise_await } from "@std/async/promise";
-import { Thread_startAsync } from "@std/async/threading/threading";
+import { Promise_Resolve, Promise_Await } from "@std/async/promise";
+import { Thread_StartAsync } from "@std/async/threading/threading";
 
 async function main() {
-    let x = await Promise_resolve(40);
-    let y = await Thread_startAsync(function() { return 2; }, []);
+    let x = await Promise_Resolve(40);
+    let y = await Thread_StartAsync(function() { return 2; }, []);
     return x + y;
 }
 
 let result = main();
-Promise_await(result); // or rely on CLI pump at script end
+Promise_Await(result); // or rely on CLI pump at script end
 ```
 
 ## Modules
 
 | Module | Key API |
 |--------|---------|
-| `promise` | `Promise`, `Promise_flush`, `Promise_await`, `Promise_all` |
-| `event_loop` | `EventLoop_schedule`, `EventLoop_pump` |
-| `threading/thread` | `Thread`, `Thread_startAsync`, `Thread_parallel` |
+| `promise` | `Promise`, `Promise_Flush`, `Promise_Await`, `Promise_All` |
+| `event_loop` | `EventLoop_Schedule`, `EventLoop_Pump` |
+| `threading/thread` | `Thread`, `Thread_StartAsync`, `Thread_Parallel` |
 | `threading/thread_pool` | `ThreadPool`, `submitAsync`, `run` |
 | `async` | Barrel re-export |
 

@@ -1,4 +1,4 @@
-# @std/io — File I/O
+# @std/io
 
 `@std/io` is written entirely in Dryad. The C++ runtime only exposes primitive filesystem operations (`open`, `read`, `write`, `close`, `mkdir`, `unlink`, `readdir`, and so on). Path cleaning, backends, streams, and error messages live in this module.
 
@@ -9,11 +9,11 @@
 | `io_errors.dryad` | `ValidatePath`, `NormalizePath`, error helpers |
 | `path.dryad` | `Path.join`, `dirname`, `basename`, `extension`, `ensureDirectory` |
 | `vfs.dryad` | `VFS`, `MemoryBackend`, `NativeBackend` |
-| `file.dryad` | `readFile`, `writeFile`, `exists`, `removeFile`, `listDirectory`, `mkdir`, `setVFSBackend` |
+| `file.dryad` | `Fs_ReadFile`, `Fs_WriteFile`, `Fs_Exists`, `Fs_RemoveFile`, `Fs_ListDirectory`, `Fs_Mkdir`, `Fs_SetBackend` |
 | `filehandle.dryad` | Handle that accumulates writes and supports append |
 | `io_concurrency.dryad` | `ThreadSafeVFS` — non-reentrant lock around one VFS |
 | `stream.dryad` | Abstract `Stream`, `SeekOrigin` |
-| `filestream.dryad` | `FileStream`, `FileMode`, `File_open`, `File_readAllText`, `File_writeAllText` |
+| `filestream.dryad` | `FileStream`, `FileMode`, `File_Open`, `File_ReadAllText`, `File_WriteAllText` |
 | `memory_stream.dryad` | `MemoryStream` over a `Buffer` |
 
 ## Quick start
@@ -21,34 +21,34 @@
 In-memory backend (no disk):
 
 ```dryad
-import { readFile, writeFile, setVFSBackend } from "@std/io/file";
+import { Fs_ReadFile, Fs_WriteFile, Fs_SetBackend } from "@std/io/file";
 import { MemoryBackend } from "@std/io/vfs";
 
-setVFSBackend(MemoryBackend());
-writeFile("/test.txt", "Hello");
-let content = readFile("/test.txt");
+Fs_SetBackend(MemoryBackend());
+Fs_WriteFile("/test.txt", "Hello");
+let content = Fs_ReadFile("/test.txt");
 ```
 
 Native filesystem (the default):
 
 ```dryad
-import { writeFile, readFile, removeFile } from "@std/io/file";
+import { Fs_WriteFile, Fs_ReadFile, Fs_RemoveFile } from "@std/io/file";
 
-writeFile("notes.txt", "On disk");
-let text = readFile("notes.txt");
-removeFile("notes.txt");
+Fs_WriteFile("notes.txt", "On disk");
+let text = Fs_ReadFile("notes.txt");
+Fs_RemoveFile("notes.txt");
 ```
 
 Stream API, which creates missing parent directories:
 
 ```dryad
-import { File_writeAllText, File_readAllText, File_delete } from "@std/io/file";
+import { File_WriteAllText, File_ReadAllText, File_Delete } from "@std/io/file";
 import { Path } from "@std/io/path";
 
 let path = Path.join("output", "report.txt");
-File_writeAllText(path, "Hello");
-let text = File_readAllText(path);
-File_delete(path);
+File_WriteAllText(path, "Hello");
+let text = File_ReadAllText(path);
+File_Delete(path);
 ```
 
 Set `DRYAD_STDLIB_DIR` when the standard library is not on the default path.
@@ -58,15 +58,15 @@ Set `DRYAD_STDLIB_DIR` when the standard library is not on the default path.
 I/O functions return **values**. Success is `null` (or the payload, for reads). Failure is a string from `@std/core/exceptions`. Nothing is thrown across the language boundary.
 
 ```dryad
-let err = writeFile("", "x");
+let err = Fs_WriteFile("", "x");
 if (err != null) {
     print(err);   // "Path cannot be null or empty"
 }
 ```
 
-`exists` is a boolean. A disposed VFS or a null path yields `false`, not an error string, so `if (exists(path))` cannot treat a failure as "the file is there".
+`Fs_Exists` is a boolean. A disposed VFS or a null path yields `false`, not an error string, so `if (Fs_Exists(path))` cannot treat a failure as "the file is there".
 
-`Stream_isError(value)` is true when `value` is not a stream (no `read` / `close`). Use it on the result of `File_open`.
+`Stream_IsError(value)` is true when `value` is not a stream (no `read` / `close`). Use it on the result of `File_Open`.
 
 ## Paths
 
@@ -85,37 +85,37 @@ if (err != null) {
 
 A `0` byte is rejected because the operating system would stop the path at that byte and open a different file than the one Dryad checked. `ValidatePath` returns `"Path contains a null byte"`. `MemoryBackend` and `NativeBackend` both go through `ValidatePath`, so `/tmp/../hello.txt` and `/hello.txt` are the same key.
 
-`Path.ensureDirectory` and `File_open` in write modes create real directories with `__mkdir`. They are not routed through the in-memory VFS.
+`Path.ensureDirectory` and `File_Open` in write modes create real directories with `__mkdir`. They are not routed through the in-memory VFS.
 
 ## VFS
 
 ```dryad
-import { VFS, MemoryBackend, VFS_writeFile, VFS_readFile, VFS_dispose } from "@std/io/vfs";
+import { VFS, MemoryBackend, VFS_WriteFile, VFS_ReadFile, VFS_Dispose } from "@std/io/vfs";
 
 let vfs = VFS(MemoryBackend());
-VFS_writeFile(vfs, "/dir/a.txt", "a");
-let text = VFS_readFile(vfs, "/dir/a.txt");
-VFS_dispose(vfs);
+VFS_WriteFile(vfs, "/dir/a.txt", "a");
+let text = VFS_ReadFile(vfs, "/dir/a.txt");
+VFS_Dispose(vfs);
 ```
 
-`MemoryBackend` stores full normalized paths in one map. `listDirectory("/dir")` returns the full keys under that prefix (`/dir/a.txt`), not bare names. `NativeBackend.listDirectory` returns the names from the operating system (`a.txt`). Do not mix the two shapes.
+`MemoryBackend` stores full normalized paths in one map. `Fs_ListDirectory("/dir")` returns the full keys under that prefix (`/dir/a.txt`), not bare names. `NativeBackend.listDirectory` returns the names from the operating system (`a.txt`). Do not mix the two shapes.
 
-`NativeBackend.readFile` checks that the read result is a string. A failed read is `IOException`, and the descriptor is closed. `writeFile` requires every byte to be written.
+`NativeBackend.readFile` checks that the read result is a string. A failed read is `IOException`, and the descriptor is closed. `NativeBackend.writeFile` requires every byte to be written.
 
-After `VFS_dispose`, reads and writes return `ObjectDisposedException`. `exists` returns `false`.
+After `VFS_Dispose`, reads and writes return `ObjectDisposedException`. `VFS_Exists` returns `false`.
 
 ## FileHandle
 
 ```dryad
-import { setVFSBackend } from "@std/io/file";
+import { Fs_SetBackend } from "@std/io/file";
 import { MemoryBackend } from "@std/io/vfs";
-import { FileHandle, FileHandle_write, FileHandle_read, FileHandle_close } from "@std/io/filehandle";
+import { FileHandle, FileHandle_Write, FileHandle_Read, FileHandle_Close } from "@std/io/filehandle";
 
-setVFSBackend(MemoryBackend());
+Fs_SetBackend(MemoryBackend());
 let writer = FileHandle("/notes.txt", "write");
-FileHandle_write(writer, "ab");
-FileHandle_write(writer, "cd");   // same handle accumulates: file is "abcd"
-FileHandle_close(writer);
+FileHandle_Write(writer, "ab");
+FileHandle_Write(writer, "cd");   // same handle accumulates: file is "abcd"
+FileHandle_Close(writer);
 ```
 
 Modes are `"read"`, `"write"`, and `"append"`.
@@ -126,7 +126,7 @@ Modes are `"read"`, `"write"`, and `"append"`.
 
 ## FileStream
 
-`File_open(path, mode)` returns a `FileStream` or an error string.
+`File_Open(path, mode)` returns a `FileStream` or an error string.
 
 | `FileMode` | Value | Opens with |
 |------------|-------|------------|
@@ -139,15 +139,15 @@ Modes are `"read"`, `"write"`, and `"append"`.
 
 ## ThreadSafeVFS
 
-`FileLock_acquire` fails immediately with `"FileLock already held"` if the lock is taken. It does not spin. The runtime is single-threaded; a waiting loop would hang the caller forever, including a re-entrant call on the same lock.
+`FileLock_Acquire` fails immediately with `"FileLock already held"` if the lock is taken. It does not spin. The runtime is single-threaded; a waiting loop would hang the caller forever, including a re-entrant call on the same lock.
 
 ```dryad
 import { MemoryBackend } from "@std/io/vfs";
-import { ThreadSafeVFS, ThreadSafeVFS_writeFile, ThreadSafeVFS_readFile } from "@std/io/io_concurrency";
+import { ThreadSafeVFS, ThreadSafeVFS_WriteFile, ThreadSafeVFS_ReadFile } from "@std/io/io_concurrency";
 
 let vfs = ThreadSafeVFS(MemoryBackend());
-ThreadSafeVFS_writeFile(vfs, "/a.txt", "one");
-let text = ThreadSafeVFS_readFile(vfs, "/a.txt");
+ThreadSafeVFS_WriteFile(vfs, "/a.txt", "one");
+let text = ThreadSafeVFS_ReadFile(vfs, "/a.txt");
 ```
 
 ## What stays in C++

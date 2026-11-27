@@ -1,4 +1,4 @@
-# @std/net — Networking
+# @std/net
 
 Blocking TCP/UDP sockets, DNS resolution, optional TLS, and a minimal HTTP client. Requires `--allow-net` (or `DRYAD_ALLOW_NET=1`).
 
@@ -9,7 +9,7 @@ Blocking TCP/UDP sockets, DNS resolution, optional TLS, and a minimal HTTP clien
 | `constants.dryad` | `SocketDomain`, `SocketType`, `Shutdown` |
 | `socket.dryad` | Low-level TCP `Socket` class |
 | `network_stream.dryad` | `NetworkStream extends Stream` |
-| `tcp_client.dryad` | `TcpClient_connect(host, port)` |
+| `tcp_client.dryad` | `TcpClient_Connect(host, port)` |
 | `tcp_listener.dryad` | `TcpListener` server facade |
 | `udp_client.dryad` | UDP send/receive |
 | `dns.dryad` | Hostname → IPv4 resolution |
@@ -26,10 +26,10 @@ Blocking TCP/UDP sockets, DNS resolution, optional TLS, and a minimal HTTP clien
 ## Quick start — TCP
 
 ```dryad
-import { TcpClient_connect } from "@std/net/tcp_client";
+import { TcpClient_Connect } from "@std/net/tcp_client";
 import { Buffer_FromString, Buffer_AsString, Buffer_Dispose } from "@std/buffers/buffer";
 
-let client = TcpClient_connect("127.0.0.1", 8080);
+let client = TcpClient_Connect("127.0.0.1", 8080);
 if (client._lastError == null && client.connected) {
     let buf = Buffer_FromString("hello");
     client.send(buf, 0, 5);
@@ -55,9 +55,9 @@ if (response.ok) {
 ## Quick start — UDP
 
 ```dryad
-import { UdpClient_create, UdpClient_sendTo, UdpClient_receiveFrom } from "@std/net/udp_client";
+import { UdpClient_Create, UdpClient_sendTo, UdpClient_receiveFrom } from "@std/net/udp_client";
 
-let udp = UdpClient_create();
+let udp = UdpClient_Create();
 UdpClient_sendTo(udp, "127.0.0.1", 9000, "ping");
 let reply = UdpClient_receiveFrom(udp, 1024);
 ```

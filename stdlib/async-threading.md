@@ -7,9 +7,9 @@ OS-level threading sub-library. Each thread runs Dryad code in an isolated `Inte
 | Use case | API |
 |----------|-----|
 | Run one function on a background thread | `Thread` |
-| Run multiple functions in parallel | `Thread_parallel` |
+| Run multiple functions in parallel | `Thread_Parallel` |
 | Reuse workers for many short jobs | `ThreadPool` |
-| Sleep without blocking the whole process | `Thread_sleepMs` |
+| Sleep without blocking the whole process | `Thread_SleepMs` |
 
 ## Thread lifecycle
 

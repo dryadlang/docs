@@ -4,18 +4,18 @@
 import {
     VFS,
     NativeBackend,
-    VFS_writeFile,
-    VFS_readFile,
-    VFS_exists,
-    VFS_removeFile,
-    VFS_dispose
+    VFS_WriteFile,
+    VFS_ReadFile,
+    VFS_Exists,
+    VFS_RemoveFile,
+    VFS_Dispose
 } from "@std/io/vfs";
 
 let vfs = VFS(NativeBackend());
 let path = "dryad_file_io_example.txt";
-VFS_writeFile(vfs, path, "Olá, ficheiro!");
-let content = VFS_readFile(vfs, path);
+VFS_WriteFile(vfs, path, "Olá, ficheiro!");
+let content = VFS_ReadFile(vfs, path);
 let ok = content == "Olá, ficheiro!";
-VFS_removeFile(vfs, path);
-ok = ok && !VFS_exists(vfs, path);
-VFS_dispose(vfs);
+VFS_RemoveFile(vfs, path);
+ok = ok && !VFS_Exists(vfs, path);
+VFS_Dispose(vfs);

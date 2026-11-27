@@ -1,4 +1,4 @@
-# @std/collections — List, Map, Set, Queue
+# @std/collections
 
 Dynamic collections without generics (untyped values for now). All implement `IEnumerable` where iteration applies.
 
