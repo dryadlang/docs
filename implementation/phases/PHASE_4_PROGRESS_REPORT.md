@@ -91,7 +91,7 @@ Integration tests:   19 ✅
 | Threading | Blocking join model. `async` / `await` arrived in Phase 5. |
 | TLS | Client-only, no rigorous cert verification |
 | Network | Blocking I/O; IPv4-focused DNS resolution |
-| Logic | `&&` / `||` did not short-circuit at the time of this report. The interpreter now short-circuits; see [execution modes](../../language/execution-modes.md). |
+| Logic | `&&` / `\|\|` did not short-circuit at the time of this report. The interpreter now short-circuits; see [execution modes](../../language/execution-modes.md). |
 
 ---
 
