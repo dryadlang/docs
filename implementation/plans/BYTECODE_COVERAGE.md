@@ -41,6 +41,9 @@
 | `new Class()`, methods | ✅ | ✅ | via `VmRuntimeDelegate` |
 | `this` | ✅ | ✅ | requires `this` slot/param |
 | Direct `fn()` calls | ✅ | ✅ | |
+| Calls through values `f(x)`, `make()(4)` | ✅ | ✅ | `CALL_VALUE`; arguments evaluated before the callee |
+| Assignment to a script global | ✅ | ✅ | `STORE_GLOBAL` |
+| Function expressions / closures | ✅ | ✅ | `MAKE_FUNCTION`, or `MAKE_CLOSURE` with cells when they capture locals |
 | Intrinsic `__read`, `__runtime_*` | ✅ | ✅ | `INTRINSIC_SYSCALL` |
 | `@compile` blocks | ✅ | ✅ | inline body |
 
@@ -52,8 +55,8 @@
 | `import` / module loading | Program-level |
 | `await` / async | Event loop integration |
 | `super` | Constructor dispatch |
-| Function expressions inside a named function | Interpreter, so the closure keeps its environment |
-| Script-level lambdas | `MAKE_FUNCTION`; parameters and body stay on the AST |
+| Function expressions in library exports | `compile_function` alone has nowhere to append the lambda; `dryad compile --lib` reports it |
+| `this` inside a function expression | Lambdas have no `this` slot |
 | Object literals `{a:1}` | No `ObjectExpression` in parser |
 | Computed method call `obj[x]()` | Rare; deferred |
 
@@ -66,4 +69,4 @@ Bytecode coverage is **complete** for:
 3. Class instance methods in `@compile("bytecode")` functions
 4. Control flow including `break`/`continue`
 
-Stdlib integration via `CALL_GLOBAL` is complete (6.13). The 6.15 example gate is complete. Closures inside named functions stay interpreted; script-level lambdas use `MAKE_FUNCTION`. Next: tier-2 JIT, and bytecode capture of mutable outer locals.
+Stdlib integration via `CALL_GLOBAL` is complete (6.13). The 6.15 example gate is complete. Closures, including mutable captured locals, run on the VM in named functions and at script level. Next: tier-2 JIT.
