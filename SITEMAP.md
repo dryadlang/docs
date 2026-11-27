@@ -116,7 +116,7 @@ Complete inventory of Dryad project documentation. This module repository holds 
 | [plans/BYTECODE_COVERAGE.md](implementation/plans/BYTECODE_COVERAGE.md) | Coverage matrix |
 | [plans/2026-09-17-stdlib-via-intrinsics.md](implementation/plans/2026-09-17-stdlib-via-intrinsics.md) | CALL_GLOBAL |
 | [plans/2026-09-17-native-binary-output.md](implementation/plans/2026-09-17-native-binary-output.md) | Native binary |
-| [plans/2026-09-17-example-triple-coverage.md](implementation/plans/2026-09-17-example-triple-coverage.md) | Example gate |
+| [plans/2026-09-17-example-triple-coverage.md](implementation/plans/2026-09-17-example-triple-coverage.md) | Example gate (6.15 complete, 51/54) |
 
 ### Principles
 
@@ -149,7 +149,7 @@ Complete inventory of Dryad project documentation. This module repository holds 
 
 | File | Description |
 |------|-------------|
-| [README.md](../src/README.md) | C++ project quick start |
+| [README.md](https://github.com/dryadlang/source/blob/main/src/README.md) | C++ project quick start |
 | [examples/README.md](./examples/README.md) | Example catalog |
 | [examples/dryadsquare/README.md](./examples/dryadsquare/README.md) | Turing benchmark |
 | [examples/dryadsquare/SPEC.md](./examples/dryadsquare/SPEC.md) | DryadSquare spec |
@@ -159,11 +159,11 @@ Complete inventory of Dryad project documentation. This module repository holds 
 
 | File | Redirects to |
 |------|--------------|
-| [stdlib/@std/io/README.md](../src/stdlib/@std/io/README.md) | docs/stdlib/io.md |
-| [stdlib/@std/collections/README.md](../src/stdlib/@std/collections/README.md) | docs/stdlib/collections.md |
-| [stdlib/@std/async/README.md](../src/stdlib/@std/async/README.md) | docs/stdlib/async.md |
-| [stdlib/@std/async/threading/README.md](../src/stdlib/@std/async/threading/README.md) | docs/stdlib/async-threading.md |
-| [stdlib/@std/net/README.md](../src/stdlib/@std/net/README.md) | docs/stdlib/net.md |
+| [stdlib/@std/io/README.md](https://github.com/dryadlang/source/blob/main/src/stdlib/@std/io/README.md) | docs/stdlib/io.md |
+| [stdlib/@std/collections/README.md](https://github.com/dryadlang/source/blob/main/src/stdlib/@std/collections/README.md) | docs/stdlib/collections.md |
+| [stdlib/@std/async/README.md](https://github.com/dryadlang/source/blob/main/src/stdlib/@std/async/README.md) | docs/stdlib/async.md |
+| [stdlib/@std/async/threading/README.md](https://github.com/dryadlang/source/blob/main/src/stdlib/@std/async/threading/README.md) | docs/stdlib/async-threading.md |
+| [stdlib/@std/net/README.md](https://github.com/dryadlang/source/blob/main/src/stdlib/@std/net/README.md) | docs/stdlib/net.md |
 
 ---
 
@@ -171,9 +171,9 @@ Complete inventory of Dryad project documentation. This module repository holds 
 
 | File | Description |
 |------|-------------|
-| [README.md](../README.md) | Project overview |
-| [CONTRIBUTING.md](../CONTRIBUTING.md) | Contribution guide |
-| [CHANGELOG](../CHANGELOG) | Release notes |
+| [README.md](https://github.com/dryadlang/source/blob/main/README.md) | Project overview |
+| [CONTRIBUTING.md](https://github.com/dryadlang/source/blob/main/CONTRIBUTING.md) | Contribution guide |
+| [CHANGELOG](https://github.com/dryadlang/source/blob/main/CHANGELOG) | Release notes |
 
 ---
 

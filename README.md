@@ -84,9 +84,9 @@ docs/
 | Lexer & parser | ✅ | [Phase 1](implementation/phases/PHASE_1_COMPLETE.md) |
 | Interpreter | ✅ | [Phase 2](implementation/phases/PHASE_2_COMPLETE.md) |
 | Intrinsics (~50 syscalls) | ✅ | [Phase 3](implementation/phases/PHASE_3_FINAL.md) |
-| Standard library | 🔄 | [Phase 4](implementation/phases/PHASE_4_PROGRESS_REPORT.md) |
-| Bytecode VM | ✅ | [Phase 6](implementation/phases/PHASE_6_TRIPLE_MODEL.md) |
-| AOT / LLVM | ✅ | [Triple model plan](implementation/plans/2026-09-16-triple-execution-model.md) |
+| Standard library | ✅ | [Phase 4](implementation/phases/PHASE_4_PROGRESS_REPORT.md) (4.1–4.5) |
+| Async runtime | ✅ | [Phase 5](implementation/plans/2026-09-16-async-runtime.md) |
+| Bytecode VM + AOT | ✅ | [Phase 6](implementation/phases/PHASE_6_TRIPLE_MODEL.md), triple gate 51/54 |
 | User libraries | ✅ | [Library system](implementation/architecture/LIBRARY_SYSTEM.md) |
 
 ### Standard library modules
@@ -129,4 +129,4 @@ Catalog: [examples/README.md](./examples/README.md)
 - Diagrams → `diagrams/dryad-language/parts/`
 - Update [SITEMAP.md](SITEMAP.md) when adding new files
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for the development workflow.
+See [CONTRIBUTING.md](https://github.com/dryadlang/source/blob/main/CONTRIBUTING.md) for the development workflow.

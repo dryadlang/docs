@@ -1,7 +1,8 @@
 # Phase 6.15 — Example Triple Coverage Gate
 
-> **Status:** In progress  
-> **Gate:** Every example in `docs/examples/manifest.json` must run in all three execution modes.
+> **Status:** Complete  
+> **Gate:** Every required example in `docs/examples/manifest.json` runs in all three execution modes.  
+> **Result:** 51/54 cells passed (3 skipped: optional `net-tcp-client`)
 
 ## Definition of done
 
@@ -9,45 +10,64 @@
 |------|---------|------------------|
 | **Interpreter** | `dryad script.dryad` | Runs without error |
 | **Bytecode VM** | `dryad --vm script.dryad` | Runs without error |
-| **AOT** | `dryad compile script.dryad --aot -o out.ll` | Compiles to LLVM IR (link/executable is next tier) |
+| **AOT** | `dryad compile script.dryad --aot -o out.ll` | Compiles to LLVM IR |
 
-Run the matrix:
+Run the matrix from the source tree:
 
 ```bash
 cd src
-./examples/run_benchmark.sh --triple
+../docs/examples/run_benchmark.sh --triple
 ```
 
-## Current gaps (AOT / micro_ir)
+`net-tcp-client` is `optional` and requests `--allow-net`. The benchmark skips it unless `--include-net` or `--include-optional` is set, because it needs an echo server on port 9090.
 
-Bytecode VM coverage is largely complete (phase 6.12). **AOT lags behind** because `bytecode → micro_ir` must lower every opcode the examples emit.
-
-### Milestone A — Language basics (`01-language/`)
+## Result
 
 | Example | Interpreter | VM | AOT compile |
-|---------|-------------|-----|-------------|
-| `basics.dryad` | ✅ | ✅ | ✅ |
-| `control_flow.dryad` | ✅ | ✅ | ✅ (native exec: loops/print; array sum partial) |
-| `functions.dryad` | ✅ | ✅ | ✅ (closures via interpreter fallback) |
-| `classes.dryad` | ✅ | ✅ | ✅ |
-| `compile_decorator.dryad` | ✅ | ✅ | ✅ |
+|---------|-------------|----|-------------|
+| `lang-basics` | ✅ | ✅ | ✅ |
+| `lang-control-flow` | ✅ | ✅ | ✅ |
+| `lang-functions` | ✅ | ✅ | ✅ |
+| `lang-classes` | ✅ | ✅ | ✅ |
+| `lang-compile-decorator` | ✅ | ✅ | ✅ |
+| `buffers-usage` | ✅ | ✅ | ✅ |
+| `collections-usage` | ✅ | ✅ | ✅ |
+| `io-vfs` | ✅ | ✅ | ✅ |
+| `io-native` | ✅ | ✅ | ✅ |
+| `io-streams` | ✅ | ✅ | ✅ |
+| `io-paths` | ✅ | ✅ | ✅ |
+| `async-promises` | ✅ | ✅ | ✅ |
+| `async-await` | ✅ | ✅ | ✅ |
+| `async-threading` | ✅ | ✅ | ✅ |
+| `net-tcp-client` | skip | skip | skip |
+| `net-http-parse` | ✅ | ✅ | ✅ |
+| `libraries-usage` | ✅ | ✅ | ✅ |
+| `turing-dryadsquare` | ✅ | ✅ | ✅ |
 
-**Recent (6.15):**
-- CFG: `IrBasicBlock` + `Br`/`BrCond` → LLVM `br`/`br i1`
-- `aot_runtime.c`: `dryad_print`, `dryad_new_array`, `dryad_array_push`, `dryad_variant_get_element`
-- VM: `__dryad_main` bytecode path, interpreter fallback for stdlib/methods/closures
-- `ADD` → `AddI32` when both operands are `I32`
+## What the gate required
 
-### Milestone B — Stdlib (`02-` … `07-`)
+Two VM cells were still failing after the earlier I/O and AOT gaps had already gone green.
 
-Buffers, collections, I/O, async, net examples require `CALL_GLOBAL` + intrinsic slow-path implementations in `aot_runtime.c`, or interpreter fallback via a richer native runtime delegate.
+### Closures (`lang-functions`)
 
-## Work order
+`makeMultiplier` returns `function(x) { return x * factor; }`. Compiling that named function to bytecode dropped the captured `factor` and handed back a native function tied to a VM that had already returned.
 
-1. **micro_ir opcode parity** — map every bytecode opcode (comparisons ✅, generic arithmetic, arrays, calls)
-2. **LLVM CFG** — emit basic blocks for `JUMP` / `JUMP_IF_FALSE` / `JUMP_IF_TRUE`
-3. **aot_runtime.c** — `dryad_intrinsic_slow`, `dryad_variant_get_element`, `print`, stdlib hooks
-4. **Gate script** — `run_benchmark.sh --triple` stays green; add CI job when coverage > 80%
+Named functions that contain a function expression stay on the interpreter. The closure keeps its environment, and `--vm` prints `42`, `42`, and `120`.
+
+`MAKE_FUNCTION` invokes the lambda through the runtime delegate instead of capturing the VM instance.
+
+### Script lambdas (`async-await`)
+
+Bytecode compilation used to move a lambda's parameters and body out of the AST. Programs that also have a named function are then executed by the interpreter, which saw a zero-parameter function and rejected `.then(function(v) { ... })` with "expects between 0 and 0 arguments, got 1".
+
+Compilation now copies the parameter list and borrows the body for the duration of the compile. The source expression is unchanged. `--vm` prints `42`, then microtask order `0` and `1`.
+
+## Follow-up semantics
+
+After the gate, interpreter and VM were aligned on logical and integer arithmetic:
+
+- `&&` / `||` short-circuit and return the deciding operand.
+- Integer division truncates. Division or modulo by zero throws.
 
 ## Key files
 
@@ -55,6 +75,6 @@ Buffers, collections, I/O, async, net examples require `CALL_GLOBAL` + intrinsic
 |------|------|
 | Examples manifest | `docs/examples/manifest.json` |
 | Triple benchmark | `docs/examples/run_benchmark.sh --triple` |
-| micro_ir lowering | `src/src/aot/micro_ir.cpp` |
-| LLVM emission | `src/src/aot/llvm_backend.cpp` |
-| Native runtime | `src/src/aot/aot_runtime.c` |
+| Lambda compilation | `src/src/compiler/bytecode_compiler.cpp` |
+| Closure call | `src/src/runtime/vm.cpp` (`MAKE_FUNCTION`) |
+| Logical and arithmetic evaluation | `src/src/compiler/evaluator.cpp` |

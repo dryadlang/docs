@@ -88,10 +88,10 @@ Integration tests:   19 ✅
 |------|------------|
 | Language | `catch`/`finally` reserved → `catchError`/`finallyDo` |
 | Async | No real event loop; Promise executor is synchronous |
-| Threading | Blocking join model; no `await` syntax yet |
+| Threading | Blocking join model. `async` / `await` arrived in Phase 5. |
 | TLS | Client-only, no rigorous cert verification |
 | Network | Blocking I/O; IPv4-focused DNS resolution |
-| Logic | `&&` does not short-circuit |
+| Logic | `&&` / `\|\|` did not short-circuit at the time of this report. The interpreter now short-circuits; see [execution modes](../../language/execution-modes.md). |
 
 ---
 

@@ -30,9 +30,9 @@ The authoritative language definition is **[dryad_theoretical_foundation_v2.pdf]
 | Lexer & parser | ✅ | Phase 1 |
 | Interpreter | ✅ | Phase 2 |
 | Intrinsics | ✅ | Phase 3 |
-| Standard library | 🔄 | Phase 4 (growing) |
-| Bytecode VM | ✅ | Phase 6 |
-| AOT / LLVM | ✅ | Phase 6 |
+| Standard library | ✅ | Phase 4.1–4.5 |
+| Async / `await` | ✅ | Phase 5 |
+| Bytecode VM + AOT | ✅ | Phase 6, including the 6.15 example gate |
 | User libraries (.dyd/.dyl) | ✅ | L1–L4 |
 | try/catch/throw | ❌ | Keywords lexed, not parsed |
 

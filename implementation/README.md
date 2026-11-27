@@ -21,7 +21,8 @@ Internal documentation for Dryad compiler/runtime development (C++ in `src/`).
 | 2 | [PHASE_2_COMPLETE](phases/PHASE_2_COMPLETE.md) | Interpreter |
 | 3 | [PHASE_3_COMPLETE](phases/PHASE_3_COMPLETE.md) / [FINAL](phases/PHASE_3_FINAL.md) | Intrinsics |
 | 4 | [PHASE_4_PROGRESS](phases/PHASE_4_PROGRESS_REPORT.md) | Standard library |
-| 6 | [PHASE_6_TRIPLE_MODEL](phases/PHASE_6_TRIPLE_MODEL.md) | Triple execution |
+| 5 | [async runtime plan](plans/2026-09-16-async-runtime.md) | Microtasks, `async`/`await`, epoll |
+| 6 | [PHASE_6_TRIPLE_MODEL](phases/PHASE_6_TRIPLE_MODEL.md) | Triple execution, 6.15 gate complete |
 
 ## Architecture
 
@@ -67,9 +68,10 @@ src/
 │   └── aot/           Micro-IR, LLVM, JIT, native linking
 ├── src/               Implementations
 ├── stdlib/@std/       Standard library (Dryad)
-├── tests/             Unit + integration tests
-└── examples/          Runnable demos
+└── tests/             Unit + integration tests
 ```
+
+Runnable examples and the triple-mode benchmark live in `docs/examples/` (`run_benchmark.sh --triple`).
 
 ## Diagrams
 

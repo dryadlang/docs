@@ -107,6 +107,10 @@ p.x = 10;
 | Assignment | `=` `+=` `-=` `*=` `/=` |
 | Member / call | `.` `()` `[]` |
 
+`&&` and `||` short-circuit and return the operand that decided the result, not a forced boolean. `true && 10` is `10`. `false && boom()` does not call `boom()`.
+
+Integer `/` truncates toward zero (`10 / 3` is `3`). Integer `/` or `%` with a zero divisor throws. Float division is unchanged.
+
 ### Precedence and bitwise semantics
 
 From lowest to highest precedence: `||` < `&&` < `|` < `^` < `&` < equality < relational < shifts (`<<` `>>`) < additive < multiplicative < unary (`!` `~` `-`).

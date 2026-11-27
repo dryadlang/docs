@@ -1,6 +1,6 @@
 # Contributing
 
-See the root [CONTRIBUTING.md](../../CONTRIBUTING.md) for the full guide.
+See the root [CONTRIBUTING.md](https://github.com/dryadlang/source/blob/main/CONTRIBUTING.md) for the full guide.
 
 **Summary:**
 
