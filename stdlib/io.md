@@ -7,7 +7,7 @@ High-level file operations built on a Virtual File System (VFS) with pluggable b
 | Module | Purpose |
 |--------|---------|
 | `vfs.dryad` | VFS routing, `MemoryBackend`, `NativeBackend` |
-| `file.dryad` | `readFile`, `writeFile`, `exists`, `removeFile`, `listDirectory`, `mkdir` |
+| `file.dryad` | `readFile`, `writeFile`, `exists`, `removeFile`, `renameFile`, `listDirectory`, `mkdir` |
 | `filehandle.dryad` | Resource-managed read/write/append handles |
 | `io_errors.dryad` | Path validation, normalization, standardized error helpers |
 | `io_concurrency.dryad` | Cooperative lock wrapper (`ThreadSafeVFS`) |
