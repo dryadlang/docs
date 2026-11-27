@@ -105,7 +105,9 @@ calls.
 `receive(buffer, offset, count)`, `sendTo(host, port, buffer, offset, count)`,
 `receiveFrom(buffer, offset, count)` (returns `{ nbytes, host, port }`),
 `localPort()`, `shutdown(how)`, `close()`, `dispose()`. `send` / `receive`
-return a byte count; the others return `null` on success.
+return a byte count; the others return `null` on success. `shutdown(how)`
+takes `Shutdown_Read`, `Shutdown_Write` or `Shutdown_Both`; any other value
+returns an error instead of reaching the system call.
 
 | Function | Returns |
 |----------|---------|
@@ -126,7 +128,7 @@ while it runs.
 | `TcpClient_Connect(host, port)` | A `TcpClient`. Check `client.connected`; on failure `client._lastError` holds the error |
 | `TcpClient` | `connected`, `send(buffer, offset, count)`, `receive(buffer, offset, count)`, `getStream()`, `close()`, `dispose()` |
 | `new TcpListener(host, port, backlog = 128)` | Server facade. `start()` binds and listens (port `0` picks one; read it from `listener.port`), `accept()` returns a `TcpClient`, `stop()`. `isListening` |
-| `NetworkStream` | A `Stream` over a connected socket: readable, writable, not seekable |
+| `NetworkStream` | A `Stream` over a connected socket. `canRead` / `canWrite` are `true` while the socket is connected, `canSeek` is `false`; `read(buffer, offset, count)` / `write(buffer, offset, count)` return a byte count or an error; `flush()` returns `null`; `length`, `position` and `seek(offset, origin)` return a "not seekable" error; `close()` closes the socket |
 | `NetworkStream_FromSocket(socket)` | A `NetworkStream`, or an error when `socket` is not a connected `Socket` |
 
 ### UDP (`@std/net/udp_client`)
@@ -146,7 +148,7 @@ while it runs.
 |------|-------------|
 | `TlsStream_IsAvailable()` | `true` when the runtime was built with `DRYAD_ENABLE_TLS=ON` |
 | `TlsStream_Connect(fd, host)` | A `TlsStream` after a client handshake on a connected descriptor, or an error (`"TLS is not available in this build"` without TLS) |
-| `TlsStream` | A `Stream` over the TLS session: readable, writable, not seekable |
+| `TlsStream` | A `Stream` over the TLS session, with the same members as `NetworkStream`: `canRead`, `canWrite`, `canSeek` (`false`), `read`, `write`, `flush`, and `length` / `position` / `seek` returning a "not seekable" error; `close()` ends the TLS session |
 
 ### HTTP (`@std/net/http/*`)
 
@@ -154,13 +156,20 @@ while it runs.
 |------|-------------|
 | `HttpClient_Create()`, `new HttpClient()` | Client with `get(url)`, `post(url, body)`, `send(request)`, `getAsync(url)`, `postAsync(url, body)`. Returns an `HttpResponse` or an error |
 | `new HttpRequest(method, url, headers, body)` | `headers` defaults to empty `HttpHeaders`, `body` to `""` |
-| `new HttpHeaders()` | `set(name, value)`, `get(name)` (`null` when missing), `has(name)` |
+| `new HttpHeaders()` | `set(name, value)`, `get(name)` (`null` when missing), `has(name)`, `forEach(callback(name, value))`. Names are case-insensitive (`get("content-type")` finds `Content-Type`). `set` returns an error for a name or value that is not a string or contains CR/LF |
 | `new HttpResponse(statusCode, statusText, headers, body)` | Plain response record |
 | `HttpResponse_Parse(raw)` | An `HttpResponse` from raw response text; an error for empty or malformed input |
 | `Http_ParseUrl(url)` | Object with `scheme`, `host`, `port` (default 80 / 443) and `path` (default `/`, query included), or an error |
 
 `https://` URLs need a TLS build. `getAsync` / `postAsync` return an already
 resolved promise; the request itself runs synchronously.
+
+`send(request)` writes every header in `request.headers`. A `Host` header
+replaces the default one; `Connection` (always `close`: the client reads the
+response to EOF) and `Content-Length` (the body's byte length) are set by the
+client. Responses with `Transfer-Encoding: chunked` are decoded, so `body`
+holds the payload; a truncated or malformed chunked body is an error
+(`"Malformed chunked HTTP body"`).
 
 ## CLI
 

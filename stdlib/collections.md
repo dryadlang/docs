@@ -34,7 +34,8 @@ unique.add("a"); // ignored
 **List**
 - `new List()` — default capacity 16
 - `new List(64)` — custom initial capacity
-- `get(index)`, `set(index, value)`, `add`, `insert`, `remove`, `removeAt`
+- `count` (number of items), `get(index)`, `set(index, value)`, `add`, `insert`, `remove`, `removeAt`
+- `contains(item)` → boolean, `indexOf(item)` → index or `-1`
 - `map(function(x) { ... })`, `filter(...)`, `reduce(...)`
 
 **Map**
@@ -47,7 +48,7 @@ unique.add("a"); // ignored
 **Queue**
 - `new Queue()` — default capacity 16
 - `new Queue(64)` — custom buffer size
-- `enqueue(item)`, `dequeue()`, `peek()`, `isEmpty()`, `clear`, `forEach` (FIFO order)
+- `count` (number of queued items), `enqueue(item)`, `dequeue()`, `peek()`, `isEmpty()`, `clear`, `forEach` (FIFO order)
 
 ## Running examples
 
