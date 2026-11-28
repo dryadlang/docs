@@ -55,6 +55,12 @@ continue;
 return value;
 ```
 
+`break` and `continue` apply to the innermost `while` or `for` in the same
+function. One with no enclosing loop is a runtime error (`'break' outside of a
+loop`); it does not reach a loop in the calling function. In a `for` loop,
+`continue` still runs the increment. `return;` with no value returns `null`,
+and a bare `return;` in a constructor ends it early.
+
 ## Classes & interfaces
 
 ```dryad
