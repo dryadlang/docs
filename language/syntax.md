@@ -11,7 +11,44 @@ let name = "Dryad";
 let ok = true;
 let empty = null;
 let items = [1, 2, 3];
+let point = { x: 1, y: 2, "with space": true };
 ```
+
+### Object literals
+
+`{ key: value, ... }` builds an object. Keys are identifiers, keywords
+(`{ set: 1, class: 2 }`), string literals or integer literals (stored as the
+string `"7"`). `{ name }` is shorthand for `{ name: name }`. Values are
+evaluated left to right, a trailing comma is allowed, and a repeated key keeps
+the last value. In statement position `{` still opens a block.
+
+```dryad
+let name = "dryad";
+let config = {
+    name,
+    version: 2,
+    tags: ["lang", "vm"],
+    nested: { debug: false },
+};
+print(config.nested.debug);
+print(config["version"]);
+```
+
+### Element access
+
+`x[key]` reads and `x[key] = value` writes, the same way in the interpreter
+and the bytecode VM:
+
+| Container | Key | Missing key / bad index |
+|-----------|-----|-------------------------|
+| array | integer | throws `Array index out of bounds` |
+| object | string | reads `null` |
+| class instance | string (fields and methods) | reads `null` |
+
+Any other key type throws `Array index must be an integer` or `Object key must
+be a string`. Indexing anything else throws `Cannot access member of
+non-object/array value` (read) or `Cannot assign to member of non-object/array
+value` (write).
 
 ## Variables
 
