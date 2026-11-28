@@ -16,7 +16,7 @@ import {
     Text_ToLowerAscii, Text_ToUpperAscii, Text_Trim, Text_TrimStart, Text_TrimEnd,
     Text_Repeat, Text_PadStart, Text_PadEnd,
     Text_Split, Text_Join, Text_Replace, Text_ReplaceAll,
-    Text_ParseInt, Text_FormatInt, Text_ParseFloat, Text_FormatFloat,
+    Text_ParseInt, Text_FormatInt, Text_ParseFloat, Text_FormatFloat, Text_FormatFloatShortest,
     StringBuilder, TextView
 } from "@std/text";
 import { Buffer_FromString, Buffer_Dispose } from "@std/buffers";
@@ -118,8 +118,9 @@ UTF-8 and reject such input with an error.
 |----------|---------|-------------|
 | `Text_ParseInt(text, base)` | `[int, error]` | Parse a signed integer |
 | `Text_FormatInt(value, base)` | `[string, error]` | Format an integer (lowercase digits) |
-| `Text_ParseFloat(text)` | `[float, error]` | Parse a decimal float |
+| `Text_ParseFloat(text)` | `[float, error]` | Parse a decimal float, correctly rounded |
 | `Text_FormatFloat(value, decimals)` | `[string, error]` | Format a float with `decimals` places |
+| `Text_FormatFloatShortest(value)` | `[string, error]` | Shortest text that parses back to exactly `value` |
 
 ## ASCII whitespace
 
@@ -138,17 +139,25 @@ in both directions.
 ## Float parsing and formatting
 
 `Text_ParseFloat` accepts an optional sign, a decimal mantissa, and an optional `e`/`E`
-exponent. Overflow — an exponent or scaled mantissa beyond the double range, such as
-`"1e309"`, `"1e1000"`, or a large mantissa scaled up — returns a `Float overflow` error;
-underflow (e.g. `"1e-400"`) returns `0.0` rather than an error.
+exponent. The result is **correctly rounded** (the nearest double, ties to even), like
+`strtod`, for any number of digits. Overflow — a value beyond the double range, such as
+`"1e309"` or `"1e1000"` — returns a `Float overflow` error; underflow (e.g. `"1e-400"`)
+returns `0.0` (or `-0.0`) rather than an error. Subnormals such as `"5e-324"` parse.
+
+`Text_FormatFloatShortest(value)` returns the shortest decimal that parses back to exactly
+`value` — the same digits as JavaScript's `Number#toString` and Python's `repr`
+(`0.1 + 0.2` gives `"0.30000000000000004"`). It uses plain notation for
+`1e-6 <= |value| < 1e21` and scientific notation otherwise (`"1e-7"`, `"1e+21"`,
+`"1.7976931348623157e+308"`). Integral values keep a `.0` (`"100.0"`) so the text still
+reads as a float; zero is `"0.0"` or `"-0.0"`. Non-finite values are rejected.
 
 `Text_FormatFloat(value, decimals)` requires `decimals` in `0..15`. Non-finite values
-(`NaN`, `+Inf`, `-Inf`) are rejected, and a finite value whose scaled magnitude reaches 2^63
-(roughly `|value| × 10^decimals ≥ 9.22e18`) returns a range error. Rounding is **half away
-from zero**: the magnitude is rounded at `0.5`, then the sign is reapplied, so `-0.5`
-formats to `-1` (with `decimals=0`) and `3.7` to `4`. A negative value that rounds to zero
-is written with a leading `'-'` (printf-style negative zero), e.g. `Text_FormatFloat(-0.4, 0)`
-is `"-0"`.
+(`NaN`, `+Inf`, `-Inf`) are rejected. It rounds the float's **exact** binary value **half
+away from zero**, at any magnitude: `Text_FormatFloat(2.675, 2)` is `"2.67"` because 2.675 is
+stored as 2.67499999…, while the exact tie `0.125` gives `"0.13"`, `-0.5` gives `-1`
+(with `decimals=0`) and `3.7` gives `4`. A negative value that rounds to zero is written
+with a leading `'-'` (printf-style negative zero), e.g. `Text_FormatFloat(-0.4, 0)` is
+`"-0"`.
 
 ## StringBuilder
 
