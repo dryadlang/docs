@@ -3,7 +3,23 @@
 Byte-indexed UTF-8 text operations, ASCII transforms, split/join/replace, numeric
 parse/format, `StringBuilder`, and `TextView`.
 
-**Source:** `src/stdlib/@std/text/text.dryad`
+**Source:** `src/stdlib/@std/text/` — `text.dryad` is the barrel; the code is split by
+topic:
+
+| Module | Contents |
+|--------|----------|
+| `access.dryad` | `Text_Length`, `Text_CharAt`, `Text_Slice`, `Text_Substring` |
+| `search.dryad` | `Text_IndexOf`, `Text_LastIndexOf`, `Text_Includes`, `Text_StartsWith`, `Text_EndsWith`, `Text_Equals`, `Text_Compare` |
+| `utf8.dryad` | `Text_CodePointAt`, `Text_FromCodePoint`, `Text_CodePoints`, `Text_CharCount` |
+| `transform.dryad` | `Text_ToLowerAscii`, `Text_ToUpperAscii`, `Text_Trim`, `Text_TrimStart`, `Text_TrimEnd`, `Text_Repeat`, `Text_PadStart`, `Text_PadEnd` |
+| `split_join.dryad` | `Text_Split`, `Text_Join`, `Text_Replace`, `Text_ReplaceAll` |
+| `integer.dryad` | `Text_ParseInt`, `Text_FormatInt` |
+| `float.dryad` | `Text_ParseFloat`, `Text_FormatFloat`, `Text_FormatFloatShortest` |
+| `string_builder.dryad` | `StringBuilder` |
+| `text_view.dryad` | `TextView` |
+
+`internal.dryad` (argument checks and raw-byte helpers), `bigint.dryad` and
+`float_conv.dryad` (exact float conversion) are internal. Import from `@std/text`.
 
 ## Import
 
@@ -22,10 +38,9 @@ import {
 import { Buffer_FromString, Buffer_Dispose } from "@std/buffers";
 ```
 
-Strings are converted to a `Buffer` (from `@std/buffers/buffer`) once per operation and
-never mutated in place. Every operation that returns a value returns a `[value, error]`
-tuple; the text module itself owns no memory beyond the temporaries it allocates and
-disposes inside each call.
+Each operation copies a string's bytes once into a scratch allocation and frees it
+before returning; strings are never mutated in place. Every operation that returns a
+value returns a `[value, error]` tuple.
 
 ## Error convention
 
