@@ -28,6 +28,7 @@ C++ runtime / OS syscalls
 ├── buffers/        Buffer — managed byte arrays
 ├── bytes/          byte operations over Buffer
 ├── text/           byte-indexed UTF-8 text and StringBuilder
+├── math/           numeric functions, constants, random numbers
 ├── collections/    List, Map, Set, Queue
 ├── io/             VFS, streams, paths, file I/O
 ├── async/          Promise, event loop, threads
@@ -45,6 +46,7 @@ Every package is importable from `@std/<package>`, which resolves to its barrel
 | Buffers | [buffers.md](buffers.md) | `@std/buffers` |
 | Bytes | [bytes.md](bytes.md) | `@std/bytes` |
 | Text | [text.md](text.md) | `@std/text` |
+| Math | [math.md](math.md) | `@std/math` |
 | Collections | [collections.md](collections.md) | `@std/collections` |
 | I/O | [io.md](io.md) | `@std/io` |
 | Async | [async.md](async.md) | `@std/async` |
